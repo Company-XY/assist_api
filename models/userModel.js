@@ -14,7 +14,7 @@ const userSchema = mongoose.Schema(
         "Experienced VA",
         "Beginner VA",
         "Agency VA",
-        "Inidividual Client",
+        "Individual Client",
         "Business Client",
       ],
       required: [true, "Select the type"],
