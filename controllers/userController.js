@@ -214,14 +214,13 @@ const resetPassword = asyncHandler(async (req, res) => {
 /////PROFILE
 //Get user profile
 const getUserProfile = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-
   try {
+    const { id } = req.params;
     const user = await User.findById(id);
     if (!user) {
       res.status(404).json("User Not Found");
     } else {
-      res.status(200).res.json({
+      res.json({
         _id: user._id,
         role: user.role,
         type: user.type,
@@ -252,8 +251,95 @@ const getUserProfile = asyncHandler(async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
 //Update user profile
+// Controller to update user details
+const updateUserProfile = asyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateFields = req.body;
+
+    // Fetch the user data to get the existing sampleWork array
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (req.file) {
+      // Update the avatar with the new file (overwriting the current one)
+      updateFields.avatar = {
+        title: req.file.originalname,
+        fileUrl: req.file.path,
+      };
+    }
+
+    if (req.files && req.files["sampleWork"]) {
+      // Retrieve the existing sampleWork files (if any)
+      const existingSampleWork = user.sampleWork || [];
+
+      // Append the new sampleWork files to the existing ones (up to 5)
+      const newSampleWorkFiles = req.files["sampleWork"]
+        .slice(0, 5)
+        .map((file) => ({
+          title: file.originalname,
+          fileUrl: file.path,
+        }));
+
+      // Merge the existing files with the new files
+      updateFields.sampleWork = [...existingSampleWork, ...newSampleWorkFiles];
+    }
+
+    // Update the user with the merged updateFields
+    const updatedUser = await User.findByIdAndUpdate(id, updateFields, {
+      new: true,
+    });
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(400).json(error);
+  }
+});
+
 //Get another user's profile
+const viewUserProfile = asyncHandler(async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      res.status(404).json("User Not Found");
+    } else {
+      res.json({
+        _id: user._id,
+        role: user.role,
+        type: user.type,
+        bio: user.bio,
+        name: user.name,
+        email: user.email,
+        emailVerified: user.emailVerified,
+        isApproved: user.isApproved,
+        consultation: user.consultation,
+        phone: user.phone,
+        phoneVerified: user.phoneVerified,
+        location: user.location,
+        contactInfo: user.contactInfo,
+        avatar: user.avatar,
+        experience: user.experience,
+        skills: user.skills,
+        availability: user.availability,
+        tasks: user.tasks,
+        sampleWork: user.sampleWork,
+        paymentMethod: user.paymentMethod,
+        paymentRate: user.paymentRate,
+        rating: user.rating,
+        isVerified: user.isVerified,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 ///////MISC//////////////////////////////////////
 //Test Server Status
@@ -284,4 +370,6 @@ module.exports = {
   resetPassword,
   getAllUser,
   getUserProfile,
+  viewUserProfile,
+  updateUserProfile,
 };

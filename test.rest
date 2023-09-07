@@ -4,11 +4,26 @@ GET http://localhost:8080/api/v1
 GET http://localhost:8080/api/v1/all/users
 
 ###
+###
+GET http://localhost:8080/api/v1/profile/64f8873d14562b8d063fe2d3
+
+###
+PATCH http://localhost:8080/api/v1/profile/64f8873d14562b8d063fe2d3
+Content-Type: application/json
+
+{
+"tasks": ["Web Development", "App Development"],
+"skills": ["HTML/CSS", "ReactJS", "NodeJs", "Tailwind CSS", "React Native"],
+"location": "Eldoret",
+"rating": 4.5
+}
+
+###
 POST http://localhost:8080/api/v1/login
 Content-Type: application/json
 
 {
-    "email": "collo@gmail.com",
+    "email": "oloogeorge633@gmail.com",
     "password": "Olosko2018?"
 }
 
@@ -17,9 +32,9 @@ POST http://localhost:8080/api/v1/register/client
 Content-Type: application/json
 
 {
-    "name": "Collog",
-    "type": "Business Client",
-    "email": "collog1824@gmail.com",
+    "name": "Olosko",
+    "type": "Inidividual Client",
+    "email": "oloogeorge633@gmail.com",
     "password": "Olosko2018?"
 }
 
@@ -28,9 +43,9 @@ POST http://localhost:8080/api/v1/register/freelancer
 Content-Type: application/json
 
 {
-    "name": "Collo",
-    "type": "Experienced VA",
-    "email": "collo@gmail.com",
+    "name": "Collo21",
+    "type": "Beginner VA",
+    "email": "collog@gmail.com",
     "password": "Olosko2018?"
 }
 

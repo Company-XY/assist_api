@@ -64,10 +64,6 @@ const userSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
-    avatar: {
-      title: String,
-      fileUrl: String,
-    },
     location: {
       type: String,
     },
@@ -85,6 +81,10 @@ const userSchema = mongoose.Schema(
     },
     availability: {
       type: String,
+    },
+    avatar: {
+      title: String,
+      fileUrl: String,
     },
     sampleWork: [
       {
