@@ -1,0 +1,30 @@
+{
+  "greetings": ["Hello!", "Hi there!", "Hey!", "Greetings!"],
+  "farewells": ["Goodbye!", "See you later!", "Bye!", "Take care!"],
+  "questions": [
+    {
+      "question": "How can I reset my password?",
+      "response": [
+        "To reset your password, go to the 'Forgot Password' page on our website and follow the instructions.",
+        "You can reset your password by clicking on the 'Forgot Password' link and following the prompts.",
+        "To change your password, visit the 'Forgot Password' page and enter your email address to receive a reset link."
+      ]
+    },
+    {
+      "question": "What are your business hours?",
+      "response": [
+        "Our business hours are from 9:00 AM to 5:00 PM, Monday to Friday.",
+        "We are open from 9 AM to 5 PM on weekdays.",
+        "Our office is operational from 9:00 AM until 5:00 PM, Monday through Friday."
+      ]
+    },
+    {
+      "question": "How do I contact customer support?",
+      "response": [
+        "You can reach our customer support team by calling our toll-free number at 1-800-123-4567.",
+        "To get in touch with customer support, send an email to support@example.com.",
+        "For assistance, contact our customer support department at 1-800-123-4567 or email us at support@example.com."
+      ]
+    }
+  ]
+}

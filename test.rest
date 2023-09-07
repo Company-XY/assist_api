@@ -57,3 +57,21 @@ Content-Type: application/json
 {
     "email": "collog1824@gmail.com"
 }
+
+###
+//Send Bot messages
+POST http://localhost:8080/api/v1/bot/message
+Content-Type: application/json
+
+{
+    "message": "How can I reset my password?"
+}
+###
+//Send Bot messages
+POST http://localhost:8080/api/v1/bot/message
+Content-Type: application/json
+
+{
+    "message": "How do I contact customer support?"
+}
+###
