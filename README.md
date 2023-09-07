@@ -10,6 +10,7 @@ You can install these dependencies using npm or yarn:
 bashCopy code
 npm install mongoose bcrypt # OR yarn add mongoose bcrypt 
 Save to grepper
+<br>
 User Schema
 The user schema defines the structure of user documents in the MongoDB collection. Below is a breakdown of the schema fields:
 •	role (String): Specifies the user's role, which can be either "Client" or "Freelancer." This field is required.
@@ -39,6 +40,7 @@ The user schema defines the structure of user documents in the MongoDB collectio
 •	resetTokenExpiration (Date): The expiration date for the reset token.
 •	rating (Number): The user's rating, which defaults to 0.
 •	isVerified (Boolean): Indicates whether the user is verified. It defaults to false.
+<br>
 User Methods
 The user model defines a method named matchPassword that is used to compare a provided password with the user's stored hashed password. This method is typically used for user authentication.
 Usage
