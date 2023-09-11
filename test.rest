@@ -5,17 +5,18 @@ GET http://localhost:8080/api/v1/all/users
 
 ###
 ###
-GET http://localhost:8080/api/v1/profile/64f8873d14562b8d063fe2d3
+GET http://localhost:8080/api/v1/profile/64fee35c195c98e3040f0746
 
 ###
-PATCH http://localhost:8080/api/v1/profile/64f8873d14562b8d063fe2d3
+PATCH http://localhost:8080/api/v1/profile/64fee35c195c98e3040f0746
 Content-Type: application/json
 
 {
 "tasks": ["Web Development", "App Development"],
 "skills": ["HTML/CSS", "ReactJS", "NodeJs", "Tailwind CSS", "React Native"],
 "location": "Eldoret",
-"rating": 4.5
+"rating": 4.5,
+"bio": "About me"
 }
 
 ###

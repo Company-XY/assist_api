@@ -17,7 +17,6 @@ const userSchema = mongoose.Schema(
     },
     bio: {
       type: String,
-      minLength: 150,
     },
     name: {
       type: String,
