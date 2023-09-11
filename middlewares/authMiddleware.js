@@ -18,7 +18,7 @@ const protect = asyncHandler(async (req, res, next) => {
 
       if (!req.user) {
         res.status(401);
-        throw new Error("User not found");
+        res.json("User not found");
       }
 
       next();
