@@ -6,7 +6,7 @@ const jobSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    PR_Services: {
+    Services: {
       type: String,
       required: true,
       enum: [
@@ -30,12 +30,10 @@ const jobSchema = mongoose.Schema(
     },
     user_email: {
       type: String,
-      required: true,
     },
     title: {
       type: String,
       required: true,
-      unique: true,
     },
     description: {
       type: String,
@@ -47,12 +45,9 @@ const jobSchema = mongoose.Schema(
         fileUrl: String,
       },
     ],
-    skills: [
-      {
-        value: String,
-        label: String,
-      },
-    ],
+    skills: {
+      type: [String],
+    },
     duration: {
       type: Number,
       required: true,

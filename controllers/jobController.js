@@ -63,7 +63,7 @@ const createJob = asyncHandler(async (req, res) => {
   try {
     const {
       title,
-      PR_Services,
+      Services,
       description,
       user_email,
       skills,
@@ -84,7 +84,7 @@ const createJob = asyncHandler(async (req, res) => {
     const newJob = await Job.create({
       user_email,
       title,
-      PR_Services,
+      Services,
       description,
       skills,
       budget,
@@ -109,26 +109,37 @@ const getOneJob = asyncHandler(async (req, res) => {
 const updateJob = asyncHandler(async (req, res) => {
   try {
     const jobId = req.params.id;
-    const { files: newFiles } = req.body;
+    const updateFields = req.body;
 
-    // Retrieve the existing job document from the database.
     const existingJob = await Job.findById(jobId);
 
     if (!existingJob) {
-      return res.status(404).json({ message: "Job not found." });
+      return res.status(404).json({ message: "Job not found" });
     }
 
-    // Append the new file(s) to the existing files array.
-    if (Array.isArray(newFiles) && newFiles.length > 0) {
-      existingJob.files = existingJob.files.concat(newFiles);
+    if (req.files && req.files["files"]) {
+      // Retrieve the existing files (if any)
+      const existingFiles = existingJob.files || [];
+
+      // Append the new files to the existing ones
+      const newFiles = req.files["files"].map((file) => ({
+        title: file.originalname,
+        fileUrl: file.path,
+      }));
+
+      // Merge the existing files with the new files
+      updateFields.files = [...existingFiles, ...newFiles];
     }
 
-    // Save the updated job document.
-    const updatedJob = await existingJob.save();
+    // Update the job with the merged updateFields
+    const updatedJob = await Job.findByIdAndUpdate(jobId, updateFields, {
+      new: true,
+    });
 
     res.status(200).json(updatedJob);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(400).json(error);
+    console.log(error);
   }
 });
 

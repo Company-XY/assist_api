@@ -1,0 +1,23 @@
+GET http://localhost:8080/api/v1
+//To get server status
+###
+GET http://localhost:8080/api/v1/jobs
+
+###
+GET http://localhost:8080/api/v1/jobs/64ff28a04179543852f04e45
+
+###
+POST http://localhost:8080/api/v1/jobs
+Content-Type: application/json
+
+{
+      "user_email" : "oloogeorge633@gmail.com",
+      "title" : "Test Job Posting 1",
+      "Services" : "Web Development",
+      "description":"A detailed description",
+      "skills" : "NodeJs, ExpressJs, NextJs",
+      "budget": 1200,
+      "duration" : 3
+}
+
+###
