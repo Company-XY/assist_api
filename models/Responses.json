@@ -7,6 +7,32 @@
       ]
     },
     {
+      "question": "hi",
+      "response": [
+        "Hello! How can I assist you with hiring a virtual assistant today?"
+      ]
+    },
+    {
+      "question": "hello there",
+      "response": [
+        "Hello! How can I assist you with hiring a virtual assistant today?"
+      ]
+    },
+    {
+      "question": "hey",
+      "response": [
+        "Hello! How can I assist you with hiring a virtual assistant today?"
+      ]
+    },
+    {
+      "question": "yeah",
+      "response": ["email: help@assistafrica.com or call us at +254790000000"]
+    },
+    {
+      "question": "yes",
+      "response": ["email: help@assistafrica.com or call us at +254790000000"]
+    },
+    {
       "question": "how can I find a virtual assistant?",
       "response": [
         "To find a virtual assistant, you can browse our list of qualified virtual assistants in various categories and skills. You can also use our search feature to narrow down your options.",
