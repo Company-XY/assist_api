@@ -10,14 +10,6 @@ const userSchema = mongoose.Schema(
     },
     type: {
       type: String,
-      enum: [
-        "Experienced VA",
-        "Beginner VA",
-        "Agency VA",
-        "Individual Client",
-        "Business Client",
-      ],
-      required: [true, "Select the type"],
     },
     isAdmin: {
       type: Boolean,
