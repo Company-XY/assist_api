@@ -4,6 +4,7 @@ const dotenv = require("dotenv").config();
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
 const botRoutes = require("./routes/botRoutes");
+const jobRoutes = require("./routes/jobRoutes");
 
 const app = express();
 app.use(cors());
@@ -26,5 +27,6 @@ mongoose
 
 app.use("/api/v1", userRoutes);
 app.use("/api/v1", botRoutes);
+app.use("/api/v1", jobRoutes);
 
 module.exports = app;
