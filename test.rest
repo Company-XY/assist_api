@@ -14,7 +14,7 @@ Content-Type: application/json
 {
 "tasks": ["Web Development", "App Development"],
 "skills": ["HTML/CSS", "ReactJS", "NodeJs", "Tailwind CSS", "React Native"],
-"location": "Eldoret",
+"location": "Nakuru",
 "rating": 4.5,
 "bio": "About me"
 }
@@ -101,3 +101,9 @@ Content-Type: application/json
     "message": "how do you make payments?"
 }
 ###
+ws http://localhost:8080/api/v1/chat
+Content-Type: application/json
+
+{
+    "message": "hello"
+}
