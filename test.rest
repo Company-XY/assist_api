@@ -1,6 +1,9 @@
 GET http://localhost:8080/api/v1
 //To get server status
 ###
+GET https://assist-api-okgk.onrender.com/api/v1
+//To get server status
+###
 GET http://localhost:8080/api/v1/all/users
 
 ###

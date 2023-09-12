@@ -44,6 +44,7 @@ const registerFreelancer = asyncHandler(async (req, res) => {
       res.status(201).json({
         _id: user._id,
         role: user.role,
+        email: user.email,
         type: user.type,
         token,
       });
@@ -91,6 +92,7 @@ const registerClient = asyncHandler(async (req, res) => {
       res.status(201).json({
         _id: user._id,
         role: user.role,
+        email: user.email,
         type: user.type,
         token,
       });
@@ -115,6 +117,7 @@ const loginUser = asyncHandler(async (req, res) => {
     res.json({
       _id: user.id,
       role: user.role,
+      email: user.email,
       token: token,
     });
   } else {
