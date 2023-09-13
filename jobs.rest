@@ -17,7 +17,7 @@ Content-Type: application/json
       "description":"A detailed description",
       "skills" : "NodeJs, ExpressJs, NextJs",
       "budget": 1200,
-      "duration" : 3
+      "duration" : 4
 }
 
 ###

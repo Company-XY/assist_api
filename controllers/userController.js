@@ -271,6 +271,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     }
 
     if (req.file) {
+      // Check if the avatar file is correctly uploaded
+      console.log("Avatar File:", req.file);
+
       // Update the avatar with the new file (overwriting the current one)
       updateFields.avatar = {
         title: req.file.originalname,
@@ -278,31 +281,21 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       };
     }
 
-    if (req.files && req.files["sampleWork"]) {
-      // Retrieve the existing sampleWork files (if any)
-      const existingSampleWork = user.sampleWork || [];
-
-      // Append the new sampleWork files to the existing ones (up to 5)
-      const newSampleWorkFiles = req.files["sampleWork"]
-        .slice(0, 5)
-        .map((file) => ({
-          title: file.originalname,
-          fileUrl: file.path,
-        }));
-
-      // Merge the existing files with the new files
-      updateFields.sampleWork = [...existingSampleWork, ...newSampleWorkFiles];
-    }
+    // Check if the updateFields include the new avatar
+    console.log("Update Fields:", updateFields);
 
     // Update the user with the merged updateFields
     const updatedUser = await User.findByIdAndUpdate(id, updateFields, {
       new: true,
     });
 
+    // Check if the user was updated correctly
+    console.log("Updated User:", updatedUser);
+
     res.status(200).json(updatedUser);
   } catch (error) {
     res.status(400).json(error);
-    console.log(error);
+    console.error(error);
   }
 });
 
