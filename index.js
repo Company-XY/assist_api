@@ -5,6 +5,9 @@ const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
 const botRoutes = require("./routes/botRoutes");
 const jobRoutes = require("./routes/jobRoutes");
+const consultationRoutes = require("./routes/consultationRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
+const mpesaRoutes = require("./routes/mpesaRoutes");
 
 const app = express();
 app.use(cors());
@@ -28,5 +31,8 @@ mongoose
 app.use("/api/v1", userRoutes);
 app.use("/api/v1", botRoutes);
 app.use("/api/v1", jobRoutes);
+app.use("/api/v1", consultationRoutes);
+app.use("/api/v1", paymentRoutes);
+app.use("/api/v1", mpesaRoutes);
 
 module.exports = app;
