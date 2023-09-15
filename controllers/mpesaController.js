@@ -1,18 +1,15 @@
 const axios = require('axios');
 
-// Define your Daraja API credentials
-const consumerKey = 'YOUR_CONSUMER_KEY';
-const consumerSecret = 'YOUR_CONSUMER_SECRET';
+const consumerKey = 'AfcrjyYGuCZ3HOA6UJUZ0foFIwKWbn8d';
+const consumerSecret = 'Wiym5053EiTCyMdl';
 const darajaBaseURL = 'https://api.safaricom.co.ke/daraja/';
 
-// Controller function to initiate a payment
 async function initiatePayment(req, res) {
   try {
-    // Make a request to the Daraja API to initiate the payment
     const response = await axios.post(
       `${darajaBaseURL}mpesa/c2b/v1/simulate`,
       {
-        ShortCode: 'YOUR_SHORTCODE',
+        ShortCode: '5097785',
         CommandID: 'CustomerPayBillOnline',
         Amount: req.body.amount,
         Msisdn: req.body.phone,
@@ -25,7 +22,6 @@ async function initiatePayment(req, res) {
       }
     );
 
-    // Handle the response from the Daraja API and send a response to the client
     res.json(response.data);
   } catch (error) {
     console.error(error);
