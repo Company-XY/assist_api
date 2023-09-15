@@ -63,7 +63,7 @@ const createJob = asyncHandler(async (req, res) => {
   try {
     const {
       title,
-      Services,
+      Service,
       description,
       user_email,
       skills,
@@ -84,7 +84,7 @@ const createJob = asyncHandler(async (req, res) => {
     const newJob = await Job.create({
       user_email,
       title,
-      Services,
+      Service,
       description,
       skills,
       budget,
