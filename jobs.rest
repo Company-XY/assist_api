@@ -4,7 +4,7 @@ GET http://localhost:8080/api/v1
 GET http://localhost:8080/api/v1/jobs
 
 ###
-GET http://localhost:8080/api/v1/jobs/64ff28a04179543852f04e45
+GET http://localhost:8080/api/v1/jobs/650403b03c6c6ea3651c333c
 
 ###
 POST http://localhost:8080/api/v1/jobs
@@ -12,7 +12,7 @@ Content-Type: application/json
 
 {
       "user_email" : "oloogeorge633@gmail.com",
-      "title" : "Test Job Posting 1",
+      "title" : "Test Web Dev",
       "Services" : "Web Development",
       "description":"A detailed description",
       "skills" : "NodeJs, ExpressJs, NextJs",
