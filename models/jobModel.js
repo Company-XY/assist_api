@@ -8,7 +8,6 @@ const jobSchema = mongoose.Schema(
     },
     Services: {
       type: String,
-      required: true,
       enum: [
         "Brand Messaging",
         "Crisis Management",
