@@ -1,6 +1,13 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
+// Define a schema for storing binary files
+const fileSchema = new mongoose.Schema({
+  filename: String,
+  contentType: String,
+  data: Buffer,
+});
+
 const userSchema = mongoose.Schema(
   {
     role: {
@@ -73,16 +80,8 @@ const userSchema = mongoose.Schema(
     availability: {
       type: String,
     },
-    avatar: {
-      title: String,
-      fileUrl: String,
-    },
-    sampleWork: [
-      {
-        title: String,
-        fileUrl: String,
-      },
-    ],
+    avatar: fileSchema, // Updated to use fileSchema for avatar
+    sampleWork: [fileSchema], // Updated to use fileSchema for sampleWork
     paymentMethod: {
       type: String,
     },

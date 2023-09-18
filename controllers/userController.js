@@ -258,6 +258,8 @@ const getUserProfile = asyncHandler(async (req, res) => {
 
 //Update user profile
 // Controller to update user details
+// Update user profile
+// Controller to update user details
 const updateUserProfile = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
@@ -270,27 +272,34 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    if (req.file) {
+    if (req.files) {
       // Check if the avatar file is correctly uploaded
-      console.log("Avatar File:", req.file);
+      if (req.files.avatar) {
+        const avatarFile = req.files.avatar[0];
+        // Update the avatar with the new file (overwriting the current one)
+        updateFields.avatar = {
+          filename: avatarFile.originalname,
+          contentType: avatarFile.mimetype,
+          data: avatarFile.buffer,
+        };
+      }
 
-      // Update the avatar with the new file (overwriting the current one)
-      updateFields.avatar = {
-        title: req.file.originalname,
-        fileUrl: req.file.path,
-      };
+      // Check if the sampleWork files are uploaded
+      if (req.files.sampleWork) {
+        const sampleWorkFiles = req.files.sampleWork;
+        // Update the sampleWork array with the new files
+        updateFields.sampleWork = sampleWorkFiles.map((file) => ({
+          filename: file.originalname,
+          contentType: file.mimetype,
+          data: file.buffer,
+        }));
+      }
     }
-
-    // Check if the updateFields include the new avatar
-    console.log("Update Fields:", updateFields);
 
     // Update the user with the merged updateFields
     const updatedUser = await User.findByIdAndUpdate(id, updateFields, {
       new: true,
     });
-
-    // Check if the user was updated correctly
-    console.log("Updated User:", updatedUser);
 
     res.status(200).json(updatedUser);
   } catch (error) {
