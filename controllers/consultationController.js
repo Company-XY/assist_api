@@ -13,6 +13,7 @@ const bookConsultation = asyncHandler(async (req, res) => {
       time,
       date2,
       time2,
+      description,
     } = req.body;
 
     const newConsultation = await Consultation.create({
@@ -26,6 +27,7 @@ const bookConsultation = asyncHandler(async (req, res) => {
       time,
       date2,
       time2,
+      description,
     });
 
     res.status(201).json(newConsultation);
