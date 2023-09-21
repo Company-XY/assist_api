@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv").config();
+const dotenv = require("dotenv");
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
 const botRoutes = require("./routes/botRoutes");
@@ -11,6 +11,7 @@ const mpesaRoutes = require("./routes/mpesaRoutes");
 
 const app = express();
 app.use(cors());
+dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
