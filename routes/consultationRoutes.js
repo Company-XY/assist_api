@@ -14,6 +14,6 @@ router
   .get(protect, getConsultations);
 router
   .route("/consultations/:id/update-datetime")
-  .put(protect, updateConsultationDateTime);
+  .patch(protect, updateConsultationDateTime);
 
 module.exports = router;
