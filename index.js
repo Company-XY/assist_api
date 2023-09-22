@@ -8,6 +8,7 @@ const jobRoutes = require("./routes/jobRoutes");
 const consultationRoutes = require("./routes/consultationRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const mpesaRoutes = require("./routes/mpesaRoutes");
+const bidRoutes = require("./routes/bidRoutes");
 
 const app = express();
 app.use(cors());
@@ -35,5 +36,6 @@ app.use("/api/v1", jobRoutes);
 app.use("/api/v1", consultationRoutes);
 app.use("/api/v1", paymentRoutes);
 app.use("/api/v1", mpesaRoutes);
+app.use("/api/v1", bidRoutes);
 
 module.exports = app;
