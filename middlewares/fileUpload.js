@@ -1,6 +1,6 @@
 const multer = require("multer");
 
-const storage = multer.memoryStorage(); // Store files in memory as binary data
+const storage = multer.memoryStorage();
 
 const allowedFileTypes = [
   "image/",
@@ -13,7 +13,6 @@ const allowedFileTypes = [
 const upload = multer({
   storage: storage,
   fileFilter: function (req, file, cb) {
-    // Check if the uploaded file is one of the allowed types
     if (allowedFileTypes.some((type) => file.mimetype.startsWith(type))) {
       cb(null, true);
     } else {

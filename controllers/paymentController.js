@@ -3,7 +3,8 @@ const User = require("../models/userModel");
 const paypal = require("paypal-rest-sdk");
 
 paypal.configure({
-  mode: "sandbox", // Change to 'live' for production
+  mode: "sandbox", // Development
+  //mode: "live", //Production
   client_id: process.env.PAYPAL_CLIENT_ID,
   client_secret: process.env.PAYPAL_CLIENT_SECRET,
 });
@@ -19,7 +20,7 @@ const depositFunds = asyncHandler(async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    user.account_balance += amount;
+    user.accountBalance += amount;
     await user.save();
 
     return res.status(201).json({ message: "Funds deposited successfully" });
@@ -42,12 +43,12 @@ const transferFunds = asyncHandler(async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    if (sender.account_balance < amount) {
+    if (sender.accountBalance < amount) {
       return res.status(400).json({ error: "Insufficient funds" });
     }
 
-    sender.account_balance -= amount;
-    recipient.account_balance += amount;
+    sender.accountBalance -= amount;
+    recipient.accountBalance += amount;
 
     await sender.save();
     await recipient.save();
@@ -84,21 +85,20 @@ const withdrawToPayPal = asyncHandler(async (req, res) => {
           recipient_type: "EMAIL",
           amount: {
             value: amount,
-            currency: "USD", // Change to the appropriate currency
+            currency: "USD",
           },
-          receiver: user.email, // Use the user's PayPal email
+          receiver: user.email,
           note: "Thank you.",
         },
       ],
     };
 
-    // Create a PayPal payout
     paypal.payout.create(payout, (error, payout) => {
       if (error) {
         console.error(error);
         return res.status(500).json({ error: "PayPal payout failed" });
       } else {
-        user.account_balance -= amount;
+        user.accountBalance -= amount;
         user.save();
         return res.status(200).json({ message: "Withdrawal successful" });
       }

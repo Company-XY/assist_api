@@ -13,7 +13,7 @@ const router = express.Router();
 router.get("/freelancer-bids", protect, getFreelancerBids);
 
 router.get("/bid-status/:id", protect, getBidStatus);
-router.put("/update-bid-status/:id", protect, updateBidStatus);
+router.patch("/update-bid-status/:id", protect, updateBidStatus);
 
 router.post("/place-bid", protect, upload.array("files", 10), placeBid);
 

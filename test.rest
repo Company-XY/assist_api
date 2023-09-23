@@ -11,15 +11,18 @@ GET http://localhost:8080/api/v1/all/users/new
 GET http://localhost:8080/api/v1/profile/64fee35c195c98e3040f0746
 
 ###
+GET http://localhost:8080/api/v1/profile/64fee35c195c98e3040f0746
+
+###
 PATCH http://localhost:8080/api/v1/profile/64fee35c195c98e3040f0746
 Content-Type: application/json
 
 {
 "tasks": ["Web Development", "App Development"],
 "skills": ["HTML/CSS", "ReactJS", "NodeJs", "Tailwind CSS", "React Native"],
-"location": "Nakuru",
-"rating": 4.5,
-"bio": "About me"
+"location": "Langas",
+"rating": 4.6,
+"bio": "About me, the new user"
 }
 
 ###
@@ -105,6 +108,13 @@ Content-Type: application/json
 }
 ###
 ws http://localhost:8080/api/v1/chat
+Content-Type: application/json
+
+{
+    "message": "hello"
+}
+###
+POST http://localhost:8080/api/v1/bid
 Content-Type: application/json
 
 {
