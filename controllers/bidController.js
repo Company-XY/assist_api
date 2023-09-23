@@ -67,7 +67,7 @@ const placeBid = asyncHandler(async (req, res) => {
       files,
     });
 
-    job.bids = String(parseInt(job.bids) + 1);
+    job.bids = job.bids ? job.bids + 1 : 1;
     await job.save();
 
     res.status(201).json(newBid);
