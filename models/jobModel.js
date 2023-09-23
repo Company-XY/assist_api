@@ -55,6 +55,9 @@ const jobSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    bids: {
+      type: String,
+    },
   },
   {
     timestamps: true,
