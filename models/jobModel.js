@@ -56,7 +56,8 @@ const jobSchema = mongoose.Schema(
       required: true,
     },
     bids: {
-      type: String,
+      type: Number,
+      default: 0,
     },
   },
   {
