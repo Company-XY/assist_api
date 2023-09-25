@@ -17,11 +17,11 @@ const getRecommendedJobs = asyncHandler(async (req, res) => {
     const commonSkills = userSkills.filter((skill) =>
       jobRequiredSkills.includes(skill)
     );
-    return commonSkills.length / userSkills.length; // Simple similarity calculation
+    return commonSkills.length / userSkills.length;
   };
   try {
     try {
-      const userId = req.user.id; // Assuming user authentication
+      const userId = req.user.id;
       const user = await User.findById(userId);
 
       const jobs = await Job.find();
@@ -118,20 +118,16 @@ const updateJob = asyncHandler(async (req, res) => {
     }
 
     if (req.files && req.files["files"]) {
-      // Retrieve the existing files (if any)
       const existingFiles = existingJob.files || [];
 
-      // Append the new files to the existing ones
       const newFiles = req.files["files"].map((file) => ({
         title: file.originalname,
         fileUrl: file.path,
       }));
 
-      // Merge the existing files with the new files
       updateFields.files = [...existingFiles, ...newFiles];
     }
 
-    // Update the job with the merged updateFields
     const updatedJob = await Job.findByIdAndUpdate(jobId, updateFields, {
       new: true,
     });
