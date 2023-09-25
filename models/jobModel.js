@@ -8,24 +8,6 @@ const jobSchema = mongoose.Schema(
     },
     Services: {
       type: String,
-      enum: [
-        "Brand Messaging",
-        "Crisis Management",
-        "Event Planning",
-        "Influencer Outreach",
-        "Media Relations",
-        "Press Release Writing",
-        "Social Media Management",
-        "Strategic Communication",
-        "Web Development",
-        "Content Creation",
-        "Reputation Management",
-        "Community Engagement",
-        "Digital Marketing",
-        "Market Research",
-        "Publicity Campaigns",
-        "Thought Leadership",
-      ],
     },
     user_email: {
       type: String,
@@ -58,6 +40,11 @@ const jobSchema = mongoose.Schema(
     bids: {
       type: Number,
       default: 0,
+    },
+    status: {
+      type: [String],
+      enum: ["Pending", "Ongoing", "Complete", "Under Review", "Cancelled"],
+      default: "Pending",
     },
   },
   {
