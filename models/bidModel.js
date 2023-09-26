@@ -2,10 +2,6 @@ const mongoose = require("mongoose");
 
 const bidSchema = mongoose.Schema(
   {
-    job: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Job",
-    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

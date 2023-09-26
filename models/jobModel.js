@@ -37,12 +37,14 @@ const jobSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    bids: {
-      type: Number,
-      default: 0,
-    },
+    bids: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Bid",
+      },
+    ],
     status: {
-      type: [String],
+      type: String,
       enum: ["Pending", "Ongoing", "Complete", "Under Review", "Cancelled"],
       default: "Pending",
     },

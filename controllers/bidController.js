@@ -65,9 +65,10 @@ const placeBid = asyncHandler(async (req, res) => {
       proposal,
       price,
       files,
+      status: "pending",
     });
 
-    job.bids = job.bids ? job.bids + 1 : 1;
+    job.bids.push(newBid._id);
     await job.save();
 
     res.status(201).json(newBid);
