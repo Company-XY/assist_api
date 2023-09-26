@@ -9,6 +9,8 @@ const consultationRoutes = require("./routes/consultationRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const mpesaRoutes = require("./routes/mpesaRoutes");
 const bidRoutes = require("./routes/bidRoutes");
+const callRoutes = require("./routes/callRoutes");
+const detailsRoutes = require("./routes/detailsRoutes");
 
 const app = express();
 app.use(cors());
@@ -37,5 +39,7 @@ app.use("/api/v1", consultationRoutes);
 app.use("/api/v1", paymentRoutes);
 app.use("/api/v1", mpesaRoutes);
 app.use("/api/v1", bidRoutes);
+app.use("/api/v1", callRoutes);
+app.use("/api/v1", detailsRoutes);
 
 module.exports = app;
