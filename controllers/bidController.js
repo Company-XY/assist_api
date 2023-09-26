@@ -46,11 +46,17 @@ const updateBidStatus = asyncHandler(async (req, res) => {
 
 const placeBid = asyncHandler(async (req, res) => {
   try {
-    const { job_id, proposal, price } = req.body;
+    const { jobId } = req.params;
+    const { name, proposal } = req.body;
 
-    const job = await Job.findById(job_id);
+    const job = await Job.findById(jobId);
+
     if (!job) {
       return res.status(404).json({ message: "Job not found." });
+    }
+
+    if (!job.bids) {
+      job.bids = []; // Initialize the bids property as an empty array
     }
 
     const files = req.files.map((file) => ({
@@ -58,17 +64,15 @@ const placeBid = asyncHandler(async (req, res) => {
       fileUrl: file.path,
     }));
 
-    const newBid = await Bid.create({
-      job: job_id,
-      user: req.user.id,
-      user_email: req.user.email,
+    const newBid = {
+      name,
       proposal,
-      price,
       files,
-      status: "pending",
-    });
+    };
 
-    job.bids.push(newBid._id);
+    job.bids.push(newBid);
+
+    // Save the updated job with the new bid
     await job.save();
 
     res.status(201).json(newBid);

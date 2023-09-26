@@ -39,8 +39,14 @@ const jobSchema = mongoose.Schema(
     },
     bids: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Bid",
+        name: String,
+        proposal: String,
+        files: [
+          {
+            title: String,
+            fileUrl: String,
+          },
+        ],
       },
     ],
     status: {

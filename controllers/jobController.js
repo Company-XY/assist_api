@@ -63,7 +63,7 @@ const createJob = asyncHandler(async (req, res) => {
   try {
     const {
       title,
-      Service,
+      Services,
       description,
       user_email,
       skills,
@@ -84,13 +84,15 @@ const createJob = asyncHandler(async (req, res) => {
     const newJob = await Job.create({
       user_email,
       title,
-      Service,
+      Services,
       description,
       skills,
       budget,
       duration,
       files,
+      bids: [],
     });
+
     res.status(201).json(newJob);
   } catch (error) {
     res.status(402).json({ message: error.message });
