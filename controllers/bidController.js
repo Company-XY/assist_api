@@ -2,88 +2,128 @@ const asyncHandler = require("express-async-handler");
 const Bid = require("../models/bidModel");
 const Job = require("../models/jobModel");
 
-const getFreelancerBids = asyncHandler(async (req, res) => {
+// Create a bid for a job
+const createBid = asyncHandler(async (req, res) => {
   try {
-    const userId = req.user.id;
-    const bids = await Bid.find({ user: userId });
-    res.status(200).json(bids);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
+    const jobId = req.params.jobId;
+    const { proposal, price } = req.body;
 
-const getBidStatus = asyncHandler(async (req, res) => {
-  try {
-    const bidId = req.params.id;
-    const bid = await Bid.findById(bidId);
-    if (!bid) {
-      return res.status(404).json({ message: "Bid not found." });
-    }
-    res.status(200).json({ status: bid.status });
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-});
+    const job = await Job.findById(jobId);
 
-const updateBidStatus = asyncHandler(async (req, res) => {
-  try {
-    const bidId = req.params.id;
-    const { status } = req.body;
-
-    const bid = await Bid.findById(bidId);
-    if (!bid) {
-      return res.status(404).json({ message: "Bid not found." });
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
     }
 
-    bid.status = status;
-    await bid.save();
+    const files = Array.isArray(req.files)
+      ? req.files.map((file) => ({
+          title: file.originalname,
+          fileUrl: file.path,
+        }))
+      : [];
 
-    res.status(200).json({ status: bid.status });
+    const newBid = {
+      proposal,
+      price,
+      files,
+    };
+
+    job.bids.push(newBid);
+    await job.save();
+
+    res.status(201).json({ message: "Bid created successfully", newBid });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
-const placeBid = asyncHandler(async (req, res) => {
+// Update a bid on a job
+const updateBid = asyncHandler(async (req, res) => {
   try {
-    const { jobId } = req.params;
-    const { name, proposal } = req.body;
+    const jobId = req.params.jobId;
+    const bidId = req.params.bidId;
+    const { proposal, price, files } = req.body;
 
     const job = await Job.findById(jobId);
 
     if (!job) {
-      return res.status(404).json({ message: "Job not found." });
+      return res.status(404).json({ message: "Job not found" });
     }
 
-    if (!job.bids) {
-      job.bids = []; // Initialize the bids property as an empty array
+    const bid = job.bids.id(bidId);
+
+    if (!bid) {
+      return res.status(404).json({ message: "Bid not found on this job" });
     }
 
-    const files = req.files.map((file) => ({
-      title: file.originalname,
-      fileUrl: file.path,
-    }));
+    // Update the bid properties
+    bid.proposal = proposal;
+    bid.price = price;
+    bid.files = files;
 
-    const newBid = {
-      name,
-      proposal,
-      files,
-    };
-
-    job.bids.push(newBid);
-
-    // Save the updated job with the new bid
     await job.save();
 
-    res.status(201).json(newBid);
+    res
+      .status(200)
+      .json({ message: "Bid updated successfully", updatedBid: bid });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Get a specific bid on a job
+const getBid = asyncHandler(async (req, res) => {
+  try {
+    const jobId = req.params.jobId;
+    const bidId = req.params.bidId;
+
+    const job = await Job.findById(jobId);
+
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+
+    const bid = job.bids.id(bidId);
+
+    if (!bid) {
+      return res.status(404).json({ message: "Bid not found on this job" });
+    }
+
+    res.status(200).json({ bid });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Delete a bid on a job
+const deleteBid = asyncHandler(async (req, res) => {
+  try {
+    const jobId = req.params.jobId;
+    const bidId = req.params.bidId;
+
+    const job = await Job.findById(jobId);
+
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+
+    const bid = job.bids.id(bidId);
+
+    if (!bid) {
+      return res.status(404).json({ message: "Bid not found on this job" });
+    }
+
+    bid.remove();
+    await job.save();
+
+    res.status(200).json({ message: "Bid deleted successfully" });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
 module.exports = {
-  getFreelancerBids,
-  getBidStatus,
-  updateBidStatus,
-  placeBid,
+  createBid,
+  updateBid,
+  getBid,
+  deleteBid,
 };

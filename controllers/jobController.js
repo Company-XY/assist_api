@@ -95,7 +95,7 @@ const createJob = asyncHandler(async (req, res) => {
 
     res.status(201).json(newJob);
   } catch (error) {
-    res.status(402).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 

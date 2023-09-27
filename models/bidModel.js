@@ -21,6 +21,7 @@ const bidSchema = mongoose.Schema(
     files: [
       {
         title: String,
+        fileUrl: String,
       },
     ],
     status: {
