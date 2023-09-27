@@ -1,5 +1,4 @@
 const express = require("express");
-const upload = require("../middlewares/fileUpload");
 const { protect } = require("../middlewares/authMiddleware");
 const {
   registerClient,
@@ -25,13 +24,6 @@ router.post("/reset", sendResetLink);
 router.post("/reset/password", resetPassword);
 router.get("/profile/:id", getUserProfile);
 router.get("/profile/other/:id", viewUserProfile);
-router.patch(
-  "/profile/:id",
-  upload.fields([
-    { name: "avatar", maxCount: 1 },
-    { name: "sampleWork", maxCount: 5 },
-  ]),
-  updateUserProfile
-);
+router.patch("/profile/:id", updateUserProfile);
 
 module.exports = router;

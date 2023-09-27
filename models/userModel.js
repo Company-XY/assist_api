@@ -80,8 +80,12 @@ const userSchema = mongoose.Schema(
     availability: {
       type: String,
     },
-    avatar: fileSchema, // Updated to use fileSchema for avatar
-    sampleWork: [fileSchema], // Updated to use fileSchema for sampleWork
+    avatar: {
+      type: String,
+    },
+    sampleWork: {
+      type: String,
+    },
     paymentMethod: {
       type: String,
     },

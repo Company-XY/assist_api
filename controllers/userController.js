@@ -257,46 +257,17 @@ const getUserProfile = asyncHandler(async (req, res) => {
 });
 
 //Update user profile
-// Controller to update user details
-// Update user profile
-// Controller to update user details
 const updateUserProfile = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
     const updateFields = req.body;
 
-    // Fetch the user data to get the existing sampleWork array
     const user = await User.findById(id);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    if (req.files) {
-      // Check if the avatar file is correctly uploaded
-      if (req.files.avatar) {
-        const avatarFile = req.files.avatar[0];
-        // Update the avatar with the new file (overwriting the current one)
-        updateFields.avatar = {
-          filename: avatarFile.originalname,
-          contentType: avatarFile.mimetype,
-          data: avatarFile.buffer,
-        };
-      }
-
-      // Check if the sampleWork files are uploaded
-      if (req.files.sampleWork) {
-        const sampleWorkFiles = req.files.sampleWork;
-        // Update the sampleWork array with the new files
-        updateFields.sampleWork = sampleWorkFiles.map((file) => ({
-          filename: file.originalname,
-          contentType: file.mimetype,
-          data: file.buffer,
-        }));
-      }
-    }
-
-    // Update the user with the merged updateFields
     const updatedUser = await User.findByIdAndUpdate(id, updateFields, {
       new: true,
     });
