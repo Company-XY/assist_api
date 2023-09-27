@@ -4,9 +4,16 @@ GET http://localhost:8080/api/v1
 GET https://assist-api-okgk.onrender.com/api/v1
 //To get server status
 ###
-GET http://localhost:8080/api/v1/all/users/new
+GET http://localhost:8080/api/v1/jobs
 
 ###
+GET http://localhost:8080/api/v1/download/6513d0c7761b2becc9447951/6513d0c7761b2becc9447952
+
+###
+
+job id..................6513d0c7761b2becc9447951
+file id....................... 6513d0c7761b2becc9447952
+title: Topic 7 DQ1.edited.docx
 ###
 GET http://localhost:8080/api/v1/profile/64fee35c195c98e3040f0746
 

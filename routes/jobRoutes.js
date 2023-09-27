@@ -11,6 +11,7 @@ const {
   updateJob,
   deleteJob,
   getJobBids,
+  downloadJobFile,
 } = require("../controllers/jobController");
 const { protect } = require("../middlewares/authMiddleware");
 
@@ -44,6 +45,8 @@ router
   .delete(deleteJob);
 
 router.get("/user-jobs/:userEmail", getUserJobs);
+
+router.get("/download/:jobId/:fileId", downloadJobFile);
 
 router.get("/job-bids/:id", getJobBids);
 

@@ -159,6 +159,34 @@ const getJobBids = asyncHandler(async (req, res) => {
   }
 });
 
+const downloadJobFile = asyncHandler(async (req, res) => {
+  const { jobId, fileId } = req.params;
+
+  try {
+    const job = await Job.findById(jobId);
+
+    if (!job) {
+      return res.status(404).json({ error: "Job not found" });
+    }
+
+    const file = job.files.id(fileId);
+
+    if (!file) {
+      return res.status(404).json({ error: "File not found" });
+    }
+
+    const filename = file.title;
+    const filePath = file.fileUrl;
+
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+    res.setHeader("Content-Type", "application/octet-stream");
+    res.status(200).download(filePath);
+  } catch (error) {
+    console.error("Error downloading file:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 module.exports = {
   getAllJobs,
   getUserJobs,
@@ -168,4 +196,5 @@ module.exports = {
   updateJob,
   deleteJob,
   getJobBids,
+  downloadJobFile,
 };
