@@ -6,6 +6,7 @@ const Job = require("../models/jobModel");
 const createBid = asyncHandler(async (req, res) => {
   try {
     const jobId = req.params.jobId;
+    const userId = req.user._id;
     const { proposal, price } = req.body;
 
     const job = await Job.findById(jobId);
@@ -14,23 +15,25 @@ const createBid = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "Job not found" });
     }
 
-    const files = Array.isArray(req.files)
-      ? req.files.map((file) => ({
-          title: file.originalname,
-          fileUrl: file.path,
-        }))
-      : [];
+    // Check if the user has already placed a bid on this job
+    const existingBid = job.bids.find((bid) => bid.user.equals(userId));
 
-    const newBid = {
-      proposal,
-      price,
-      files,
-    };
+    if (existingBid) {
+      existingBid.proposal = proposal;
+      existingBid.price = price;
+    } else {
+      const newBid = {
+        user: userId,
+        proposal,
+        price,
+        files: [],
+      };
+      job.bids.push(newBid);
+    }
 
-    job.bids.push(newBid);
     await job.save();
 
-    res.status(201).json({ message: "Bid created successfully", newBid });
+    res.status(201).json({ message: "Bid created or updated successfully" });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
