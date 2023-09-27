@@ -2,21 +2,21 @@ const mongoose = require("mongoose");
 
 const bidSchema = mongoose.Schema(
   {
-    user: {
+    client: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    user_email: {
+    user: {
       type: String,
-      required: true,
+    },
+    email: {
+      type: String,
     },
     proposal: {
       type: String,
-      required: true,
     },
     price: {
       type: Number,
-      required: true,
     },
     files: [
       {
