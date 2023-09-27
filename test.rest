@@ -7,6 +7,15 @@ GET https://assist-api-okgk.onrender.com/api/v1
 GET http://localhost:8080/api/v1/jobs
 
 ###
+POST http://localhost:8080/api/v1/deposit
+Content-Type: application/json
+
+{
+    "phone": "0799590711",
+    "amount": "1"
+}
+
+###
 GET http://localhost:8080/api/v1/download/6513d0c7761b2becc9447951/6513d0c7761b2becc9447952
 
 ###

@@ -1,7 +1,8 @@
 const express = require("express");
-const router = express.Router();
-const { initiatePayment } = require("../controllers/mpesaController");
+const { createToken, stkPush } = require("../controllers/mpesaController");
 
-router.post("/initiate-payment", initiatePayment);
+const router = express.Router();
+
+router.post("/deposit", createToken, stkPush);
 
 module.exports = router;
