@@ -221,6 +221,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
+
     if (!user) {
       res.status(404).json("User Not Found");
     } else {
@@ -249,6 +250,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
         paymentRate: user.paymentRate,
         rating: user.rating,
         isVerified: user.isVerified,
+        createdAt: user.createdAt,
       });
     }
   } catch (error) {
