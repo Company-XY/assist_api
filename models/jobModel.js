@@ -39,7 +39,7 @@ const jobSchema = mongoose.Schema(
     },
     bids: [
       {
-        name: String,
+        email: String,
         proposal: String,
         files: [
           {
@@ -47,11 +47,30 @@ const jobSchema = mongoose.Schema(
             fileUrl: String,
           },
         ],
+        price: {
+          type: Number,
+        },
+        status: {
+          type: String,
+          enum: ["Pending", "Ongoing", "Complete"],
+          default: "Pending",
+        },
       },
     ],
-    status: {
+    product: {
+      files: [
+        {
+          title: String,
+          fileUrl: String,
+        },
+      ],
+      review: {
+        type: String,
+      },
+    },
+    stage: {
       type: String,
-      enum: ["Pending", "Ongoing", "Complete", "Under Review", "Cancelled"],
+      enum: ["Pending", "Ongoing", "UnderReview", "Disputed", "Complete"],
       default: "Pending",
     },
   },

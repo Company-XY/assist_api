@@ -1,6 +1,5 @@
 const asyncHandler = require("express-async-handler");
 const Job = require("../models/jobModel");
-const Bid = require("../models/bidModel");
 const User = require("../models/userModel");
 
 const getAllJobs = asyncHandler(async (req, res) => {
@@ -38,7 +37,7 @@ const getRecommendedJobs = asyncHandler(async (req, res) => {
 
       recommendedJobs.sort((a, b) => b.skillSimilarity - a.skillSimilarity);
 
-      const topRecommendedJobs = recommendedJobs.slice(0, 10); // Select top 10 recommendations
+      const topRecommendedJobs = recommendedJobs.slice(0, 10);
 
       res.status(200).json(topRecommendedJobs);
     } catch (error) {
@@ -91,6 +90,7 @@ const createJob = asyncHandler(async (req, res) => {
       duration,
       files,
       bids: [],
+      product: {},
     });
 
     res.status(201).json(newJob);
@@ -150,15 +150,6 @@ const deleteJob = asyncHandler(async (req, res) => {
   }
 });
 
-const getJobBids = asyncHandler(async (req, res) => {
-  try {
-    const jobBids = await Bid.find({ job: req.params.id });
-    res.status(200).json(jobBids);
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-});
-
 const downloadJobFile = asyncHandler(async (req, res) => {
   const { jobId, fileId } = req.params;
 
@@ -195,6 +186,5 @@ module.exports = {
   getOneJob,
   updateJob,
   deleteJob,
-  getJobBids,
   downloadJobFile,
 };

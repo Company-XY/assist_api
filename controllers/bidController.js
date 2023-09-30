@@ -1,8 +1,6 @@
 const asyncHandler = require("express-async-handler");
-const Bid = require("../models/bidModel");
 const Job = require("../models/jobModel");
 
-// Create a bid for a job
 const createBid = asyncHandler(async (req, res) => {
   try {
     const jobId = req.params.jobId;
@@ -49,7 +47,7 @@ const updateBid = asyncHandler(async (req, res) => {
   try {
     const jobId = req.params.jobId;
     const bidId = req.params.bidId;
-    const { proposal, price, files } = req.body;
+    const { proposal, price, files, status } = req.body;
 
     const job = await Job.findById(jobId);
 
@@ -67,6 +65,7 @@ const updateBid = asyncHandler(async (req, res) => {
     bid.proposal = proposal;
     bid.price = price;
     bid.files = files;
+    bid.status = status;
 
     await job.save();
 
