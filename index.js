@@ -17,6 +17,7 @@ app.use(cors());
 dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public')); 
 
 const PORT = process.env.PORT || 7000;
 const URL = process.env.MONGO_URI;

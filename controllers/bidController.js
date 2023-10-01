@@ -36,7 +36,7 @@ const createBid = asyncHandler(async (req, res) => {
 
     await job.save();
 
-    res.status(201).json({ message: "Bid created or updated successfully" });
+    res.status(201).json(job.bids);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -77,8 +77,8 @@ const updateBid = asyncHandler(async (req, res) => {
   }
 });
 
-// Get a specific bid on a job
-const getBid = asyncHandler(async (req, res) => {
+// Get a specific bids on a job
+const getBids = asyncHandler(async (req, res) => {
   try {
     const jobId = req.params.jobId;
     const bidId = req.params.bidId;
@@ -128,9 +128,63 @@ const deleteBid = asyncHandler(async (req, res) => {
   }
 });
 
+// Update a bid on a job and change its status to ongoing
+const awardBid = asyncHandler(async (req, res) => {
+  try {
+    const jobId = req.params.jobId;
+    const bidId = req.params.bidId;
+
+    const job = await Job.findById(jobId);
+
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+
+    const bid = job.bids.id(bidId);
+
+    if (!bid) {
+      return res.status(404).json({ message: "Bid not found on this job" });
+    }
+
+    // Change the bid status to "ongoing"
+    bid.status = "Ongoing";
+
+    await job.save();
+
+    res.status(200).json({
+      message: "Bid awarded and status changed to ongoing",
+      awardedBid: bid,
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Get all ongoing bids on a job
+const getOngoingBid = asyncHandler(async (req, res) => {
+  try {
+    const jobId = req.params.jobId;
+
+    const job = await Job.findById(jobId);
+
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+
+    // Filter the bids to get only those with status "ongoing"
+    const ongoingBids = job.bids.filter((bid) => bid.status === "Ongoing");
+
+    res.status(200).json({ ongoingBids });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 module.exports = {
   createBid,
   updateBid,
-  getBid,
+  getBids,
   deleteBid,
+  awardBid,
+  getOngoingBid,
 };

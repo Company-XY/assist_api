@@ -2,6 +2,15 @@ const asyncHandler = require("express-async-handler");
 const Job = require("../models/jobModel");
 const User = require("../models/userModel");
 
+const getFeedJobs = asyncHandler(async (req, res) => {
+  try {
+    const pendingJobs = await Job.find({ stage: "Pending" });
+    res.status(200).json(pendingJobs);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 const getAllJobs = asyncHandler(async (req, res) => {
   try {
     const jobs = await Job.find();
@@ -178,6 +187,43 @@ const downloadJobFile = asyncHandler(async (req, res) => {
   }
 });
 
+const completeJob = asyncHandler(async (req, res) => {
+  try {
+    const jobId = req.params.id;
+
+    const job = await Job.findById(jobId);
+
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+
+    if (job.stage === "Complete") {
+      return res
+        .status(400)
+        .json({ message: "Job is already marked as Complete" });
+    }
+
+    const uploadedFiles = req.files.map((file) => ({
+      title: file.originalname,
+      fileUrl: file.path,
+    }));
+
+    job.product = {
+      files: uploadedFiles,
+      review: req.body.review,
+    };
+
+    job.stage = "UnderReview";
+    await job.save();
+
+    res
+      .status(200)
+      .json({ message: "Job completed and under review", updatedJob: job });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 module.exports = {
   getAllJobs,
   getUserJobs,
@@ -187,4 +233,6 @@ module.exports = {
   updateJob,
   deleteJob,
   downloadJobFile,
+  completeJob,
+  getFeedJobs,
 };

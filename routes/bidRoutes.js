@@ -4,8 +4,10 @@ const path = require("path");
 const {
   createBid,
   updateBid,
-  getBid,
+  getBids,
   deleteBid,
+  awardBid,
+  getOngoingBid,
 } = require("../controllers/bidController");
 const { protect } = require("../middlewares/authMiddleware");
 
@@ -29,7 +31,9 @@ const router = express.Router();
 
 router.post("/place-bid/:jobId", upload.array("files", 4), createBid);
 router.patch("/update-bid/:jobId/:bidId", upload.array("files", 4), updateBid);
-router.get("/get-bid/:jobId/:bidId", getBid);
+router.patch("/award-bid/:jobId/:bidId", awardBid);
+router.get("/get-bids/:jobId", getBids);
+router.get("/get-bid/:jobId", getOngoingBid);
 router.delete("/delete-bid/:jobId/:bidId", deleteBid);
 
 module.exports = router;
