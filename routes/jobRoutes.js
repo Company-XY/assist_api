@@ -3,15 +3,15 @@ const multer = require("multer");
 const path = require("path");
 const {
   getAllJobs,
-  getUserJobs,
   getRecommendedJobs,
   createJob,
   getOneJob,
   updateJob,
   deleteJob,
   downloadJobFile,
-  completeJob,
+  submitJob,
   getFeedJobs,
+  approveJob,
 } = require("../controllers/jobController");
 const { protect } = require("../middlewares/authMiddleware");
 
@@ -48,9 +48,8 @@ router
   .patch(upload.array("files", 10), updateJob)
   .delete(deleteJob);
 
-router.post("/jobs/:id/complete", upload.array("files", 10), completeJob);
-
-router.get("/user-jobs/:userEmail", getUserJobs);
+router.post("/jobs/:id/approve", upload.array("files", 10), approveJob);
+router.post("/jobs/:id/submit", upload.array("files", 10), submitJob);
 
 router.get("/download/:jobId/:fileId", downloadJobFile);
 

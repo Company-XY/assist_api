@@ -12,6 +12,9 @@ const jobSchema = mongoose.Schema(
     user_email: {
       type: String,
     },
+    name: {
+      type: String,
+    },
     title: {
       type: String,
       required: true,
@@ -72,6 +75,10 @@ const jobSchema = mongoose.Schema(
       type: String,
       enum: ["Pending", "Ongoing", "UnderReview", "Disputed", "Complete"],
       default: "Pending",
+    },
+    paymentVerified: {
+      type: Boolean,
+      default: false,
     },
   },
   {

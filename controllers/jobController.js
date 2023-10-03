@@ -57,16 +57,6 @@ const getRecommendedJobs = asyncHandler(async (req, res) => {
   }
 });
 
-const getUserJobs = asyncHandler(async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const jobs = await Job.find({ user: userId });
-    res.status(200).json(jobs);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
 const createJob = asyncHandler(async (req, res) => {
   try {
     const {
@@ -187,7 +177,7 @@ const downloadJobFile = asyncHandler(async (req, res) => {
   }
 });
 
-const completeJob = asyncHandler(async (req, res) => {
+const submitJob = asyncHandler(async (req, res) => {
   try {
     const jobId = req.params.id;
 
@@ -224,15 +214,48 @@ const completeJob = asyncHandler(async (req, res) => {
   }
 });
 
+const approveJob = asyncHandler(async (req, res) => {
+  try {
+    const jobId = req.params.id;
+
+    const job = await Job.findById(jobId);
+
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+
+    if (job.stage === "Complete") {
+      return res.status(400).json({ message: "Job is already marked as Complete" });
+    }
+
+    const uploadedFiles = req.files ? req.files.map((file) => ({
+      title: file.originalname,
+      fileUrl: file.path,
+    })) : [];
+
+    job.product = {
+      files: uploadedFiles,
+      review: req.body.review,
+    };
+    job.stage = "Complete";
+
+    await job.save();
+
+    res.status(200).json({ message: "Job approved and marked as Complete", updatedJob: job });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 module.exports = {
   getAllJobs,
-  getUserJobs,
   getRecommendedJobs,
   createJob,
   getOneJob,
   updateJob,
   deleteJob,
   downloadJobFile,
-  completeJob,
+  submitJob,
   getFeedJobs,
+  approveJob
 };
