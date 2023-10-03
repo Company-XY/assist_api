@@ -35,13 +35,13 @@ const createJob = asyncHandler(async (req, res) => {
       title,
       Services,
       description,
-      email,
+      user_email,
       name,
       skills,
       budget,
       duration,
     } = req.body;
-    if (!email) {
+    if (!user_email) {
       return res.status(400).json({ message: "User email not found." });
     }
 
@@ -53,7 +53,7 @@ const createJob = asyncHandler(async (req, res) => {
       : [];
 
     const newJob = await Job.create({
-      email,
+      user_email,
       name,
       title,
       Services,
@@ -171,7 +171,7 @@ const submitJob = asyncHandler(async (req, res) => {
         files: [...existingProductFiles, ...newProductFiles],
       };
     }
-
+    console.log(updateFields);
     updateFields.stage = "UnderReview";
 
     const updatedJob = await Job.findByIdAndUpdate(jobId, updateFields, {
