@@ -67,9 +67,6 @@ const jobSchema = mongoose.Schema(
           fileUrl: String,
         },
       ],
-      review: {
-        type: String,
-      },
     },
     stage: {
       type: String,
@@ -79,6 +76,9 @@ const jobSchema = mongoose.Schema(
     paymentVerified: {
       type: Boolean,
       default: false,
+    },
+    review: {
+      type: String,
     },
   },
   {
