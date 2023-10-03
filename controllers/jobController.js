@@ -64,6 +64,7 @@ const createJob = asyncHandler(async (req, res) => {
       Services,
       description,
       user_email,
+      name,
       skills,
       budget,
       duration,
@@ -81,6 +82,7 @@ const createJob = asyncHandler(async (req, res) => {
 
     const newJob = await Job.create({
       user_email,
+      name,
       title,
       Services,
       description,

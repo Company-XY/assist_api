@@ -45,6 +45,7 @@ const registerFreelancer = asyncHandler(async (req, res) => {
         _id: user._id,
         role: user.role,
         email: user.email,
+        name: user.name,
         type: user.type,
         token,
       });
@@ -93,6 +94,7 @@ const registerClient = asyncHandler(async (req, res) => {
         _id: user._id,
         role: user.role,
         email: user.email,
+        name: user.name,
         type: user.type,
         token,
       });
@@ -118,6 +120,7 @@ const loginUser = asyncHandler(async (req, res) => {
       _id: user.id,
       role: user.role,
       email: user.email,
+      name: user.name,
       token: token,
     });
   } else {
