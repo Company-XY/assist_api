@@ -67,6 +67,12 @@ const jobSchema = mongoose.Schema(
           fileUrl: String,
         },
       ],
+      review: {
+        type: String,
+      },
+      name: {
+        type: String,
+      },
     },
     stage: {
       type: String,
