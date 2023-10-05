@@ -1,13 +1,23 @@
 GET http://localhost:8080/api/v1
 //To get server status
 ###
+GET http://localhost:8080/api/v1/rating
+//To get server status
+###
 GET https://assist-api-okgk.onrender.com/api/v1
 //To get server status
 ###
 GET https://assist-api-okgk.onrender.com/api/v1/download/6513d0c7761b2becc9447951/6513d0c7761b2becc9447952
 
 ###
-GET http://localhost:8080/api/v1/jobs
+PATCH http://localhost:8080/api/v1/review/651d90f196755fbdd6a779f5
+Content-Type: application/json
+
+{
+    "rating": 4,
+    "review": "Good job, well done"
+}
+
 
 ###
 GET http://localhost:8080/api/v1/feed-jobs
