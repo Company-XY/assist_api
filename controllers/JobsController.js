@@ -375,6 +375,29 @@ function calculateAverageRating(reviews) {
   return totalRating / reviews.length;
 }
 
+//Review JOb 2
+const reviewJob = asyncHandler(async (req, res) => {
+  try {
+    const jobId = req.params.id;
+    const updateFields = req.body;
+
+    const existingJob = await Job.findById(jobId);
+
+    if (!existingJob) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+
+    const updatedJob = await Job.findByIdAndUpdate(jobId, updateFields, {
+      new: true,
+    });
+
+    res.status(200).json(updatedJob);
+  } catch (error) {
+    res.status(400).json(error);
+    console.error(error);
+  }
+});
+
 module.exports = {
   getAllJobs,
   getFeedJobs,
@@ -389,4 +412,5 @@ module.exports = {
   reviewAndApproveJob,
   downloadProductFile,
   addReviewAndRating,
+  reviewJob,
 };

@@ -15,6 +15,7 @@ const {
   reviewAndApproveJob,
   downloadProductFile,
   addReviewAndRating,
+  reviewJob,
 } = require("../controllers/JobsController");
 const { protect } = require("../middlewares/authMiddleware");
 
@@ -44,6 +45,7 @@ router
 router.post("/jobs/:jobId", addReviewAndRating);
 router.get("/jobs-feed", getFeedJobs);
 router.patch("/jobs/:id", updateJob);
+router.patch("/review/:id", reviewJob);
 router.delete("/jobs/:id", deleteJob);
 router.get("/jobs/:id", getOneJob);
 router.patch("/jobs/submit/:id", submitJob);
