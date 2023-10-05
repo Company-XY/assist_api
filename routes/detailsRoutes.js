@@ -10,14 +10,14 @@ const { protect } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
-router.get("/details", protect, getAllDetails);
+router.get("/details", getAllDetails);
 
-router.post("/details", protect, createDetail);
+router.post("/details", createDetail);
 
-router.get("/details/:id", protect, getOneDetail);
+router.get("/details/:id", getOneDetail);
 
-router.patch("/details/:id", protect, updateDetail);
+router.patch("/details/:id", updateDetail);
 
-router.delete("/details/:id", protect, deleteDetail);
+router.delete("/details/:id", deleteDetail);
 
 module.exports = router;

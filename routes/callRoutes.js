@@ -10,14 +10,14 @@ const { protect } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
-router.get("/calls", protect, getAllCalls);
+router.get("/calls", getAllCalls);
 
-router.post("/calls", protect, createCall);
+router.post("/calls", createCall);
 
-router.get("/calls/:id", protect, getOneCall);
+router.get("/calls/:id", getOneCall);
 
-router.patch("/calls/:id", protect, updateCall);
+router.patch("/calls/:id", updateCall);
 
-router.delete("/calls/:id", protect, deleteCall);
+router.delete("/calls/:id", deleteCall);
 
 module.exports = router;
