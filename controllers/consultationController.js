@@ -1,72 +1,19 @@
-const asyncHandler = require("express-async-handler");
-const Consultation = require("../models/consultationModel");
+const Call = require("../models/callModel");
+const Details = require("../models/detailsModel");
 
-const bookConsultation = asyncHandler(async (req, res) => {
+const mergeController = {};
+
+mergeController.getAllDetails = async (req, res) => {
   try {
-    const {
-      title,
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      date,
-      time,
-      date2,
-      time2,
-      description,
-    } = req.body;
+    const calls = await Call.find();
+    const details = await Details.find();
 
-    const newConsultation = await Consultation.create({
-      user: req.user._id,
-      title,
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      date,
-      time,
-      date2,
-      time2,
-      description,
-    });
+    const mergedData = [...calls, ...details];
 
-    res.status(201).json(newConsultation);
+    res.status(200).json(mergedData);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ error: "Internal Server Error" });
   }
-});
-
-const getConsultations = asyncHandler(async (req, res) => {
-  try {
-    const consultations = await Consultation.find({ user: req.user.id });
-    res.status(200).json(consultations);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-const updateConsultationDateTime = asyncHandler(async (req, res) => {
-  try {
-    const consultationId = req.params.id;
-    const { date, time } = req.body;
-
-    const consultation = await Consultation.findById(consultationId);
-    if (!consultation) {
-      return res.status(404).json({ message: "Consultation not found." });
-    }
-
-    consultation.date = date;
-    consultation.time = time;
-    await consultation.save();
-
-    res.status(200).json(consultation);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-module.exports = {
-  bookConsultation,
-  getConsultations,
-  updateConsultationDateTime,
 };
+
+module.exports = mergeController;
