@@ -86,6 +86,9 @@ const jobSchema = mongoose.Schema(
     review: {
       type: String,
     },
+    rating: {
+      type: Number,
+    },
   },
   {
     timestamps: true,

@@ -11,7 +11,6 @@ const mpesaRoutes = require("./routes/mpesaRoutes");
 const bidRoutes = require("./routes/bidRoutes");
 const callRoutes = require("./routes/callRoutes");
 const detailsRoutes = require("./routes/detailsRoutes");
-const testRoutes = require("./routes/test");
 const productRoutes = require("./routes/productRoutes");
 
 const app = express();
@@ -45,6 +44,5 @@ app.use("/api/v1", bidRoutes);
 app.use("/api/v1", callRoutes);
 app.use("/api/v1", detailsRoutes);
 app.use("/api/v1", productRoutes);
-app.use("/api/v1/test", testRoutes);
 
 module.exports = app;

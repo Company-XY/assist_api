@@ -300,6 +300,81 @@ const downloadJobFile = asyncHandler(async (req, res) => {
   }
 });
 
+//DOWNLOAD product files
+//GET METHOD
+const downloadProductFile = asyncHandler(async (req, res) => {
+  const { jobId, fileId } = req.params;
+
+  try {
+    const job = await Job.findById(jobId);
+
+    if (!job) {
+      return res.status(404).json({ error: "Job not found" });
+    }
+
+    const productFile = job.product.files.id(fileId);
+
+    if (!productFile) {
+      return res.status(404).json({ error: "Product file not found" });
+    }
+
+    const filename = productFile.title;
+    const filePath = productFile.fileUrl;
+
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+    res.setHeader("Content-Type", "application/octet-stream");
+    res.status(200).download(filePath);
+  } catch (error) {
+    console.error("Error downloading product file:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// Add the review and rating function
+const addReviewAndRating = asyncHandler(async (req, res) => {
+  const { jobId } = req.params;
+  const { text, rating } = req.body;
+
+  try {
+    const job = await Job.findById(jobId);
+
+    if (!job) {
+      return res.status(404).json({ error: "Job not found" });
+    }
+
+    if (!text || !rating) {
+      return res
+        .status(400)
+        .json({ error: "Both text review and rating are required" });
+    }
+
+    const newReview = {
+      user: req.user._id,
+      text,
+      rating,
+    };
+
+    job.reviews.push(newReview);
+    job.rating = calculateAverageRating(job.reviews);
+
+    await job.save();
+
+    res.status(201).json({ message: "Review and rating added successfully" });
+  } catch (error) {
+    console.error("Error adding review and rating:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+function calculateAverageRating(reviews) {
+  if (reviews.length === 0) {
+    return 0;
+  }
+
+  const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+  return totalRating / reviews.length;
+}
+
 module.exports = {
   getAllJobs,
   getFeedJobs,
@@ -312,4 +387,6 @@ module.exports = {
   downloadJobFile,
   disputeJob,
   reviewAndApproveJob,
+  downloadProductFile,
+  addReviewAndRating,
 };

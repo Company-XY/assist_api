@@ -11,17 +11,17 @@ GET http://localhost:8080/api/v1/jobs/6517d09f9613bd2548525740
 GET http://localhost:8080/api/v1/jobs/651d5b55c32feec96f14bd12
 
 ###
-POST http://localhost:8080/api/v1/jobs
+POST https://assist-api-okgk.onrender.com/api/v1/jobs
 Content-Type: application/json
 
-{
-      "user_email" : "oloogeorge633@gmail.com",
-      "title" : "Test Web Dev 2",
-      "Services" : "Web Development",
-      "description":"A detailed description",
-      "skills" : "NodeJs, ExpressJs, NextJs",
-      "budget": 1200,
-      "duration" : 4
-}
+  {
+    "user_email": "client2@gmail.com",
+    "title": "HR Virtual Assistant",
+    "services": "HR Support",
+    "description": "We need a virtual assistant to support our HR department. Your responsibilities will include job posting, resume screening, and interview coordination.",
+    "skills": "HR Support, Recruitment",
+    "budget": 850,
+    "duration": 75
+  }
 
 ###
