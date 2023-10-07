@@ -12,7 +12,7 @@ function findResponse(question) {
       ];
     return randomResponse;
   } else {
-    return "I'm sorry, I don't have a response to that question. Would you like to talk to one of our agents";
+    return "I'm sorry, I don't have a response to that question. Would you like to talk to one of our agent";
   }
 }
 
