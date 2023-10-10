@@ -1,30 +1,34 @@
 const axios = require("axios");
+const User = require("../models/userModel");
 
 const createToken = async (req, res, next) => {
   const secret = process.env.MPESA_SECRET;
   const consumer = process.env.MPESA_CONSUMER;
   const auth = new Buffer.from(`${consumer}:${secret}`).toString("base64");
-  await axios
-    .get(
+  try {
+    const { data } = await axios.get(
       "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials",
       {
         headers: {
           authorization: `Basic ${auth}`,
         },
       }
-    )
-    .then((data) => {
-      token = data.data.access_token;
-      console.log(data.data);
-      next();
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(400).json(err.message);
-    });
+    );
+    req.token = data.access_token;
+    next();
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err.message);
+  }
 };
 
 const stkPush = async (req, res) => {
+  const userId = req.header("x-user-id");
+
+  if (!userId) {
+    return res.status(401).json({ message: "User ID not provided" });
+  }
+
   const shortCode = 174379;
   const phone = req.body.phone.substring(1);
   const amount = req.body.amount;
@@ -56,20 +60,39 @@ const stkPush = async (req, res) => {
     TransactionDesc: "Testing stk push",
   };
 
-  await axios
-    .post(url, data, {
+  try {
+    const response = await axios.post(url, data, {
       headers: {
-        authorization: `Bearer ${token}`,
+        authorization: `Bearer ${req.token}`,
       },
-    })
-    .then((data) => {
-      console.log(data);
-      res.status(200).json(data.data);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(400).json(err.message);
     });
+
+    try {
+      const user = await User.findById(userId);
+
+      console.log(user);
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const newBalance = user.accountBalance + parseFloat(amount);
+      user.accountBalance = newBalance;
+      await user.save();
+
+      console.log("User account balance updated:", newBalance);
+
+      res
+        .status(200)
+        .json({ message: "STK push successful and user balance updated" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error updating user balance" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err.message);
+  }
 };
 
 module.exports = { createToken, stkPush };
