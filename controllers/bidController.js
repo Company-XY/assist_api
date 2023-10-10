@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Job = require("../models/jobModel");
+const User = require("../models/userModel");
 
 const createBid = asyncHandler(async (req, res) => {
   try {
@@ -146,10 +147,37 @@ const awardBid = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "Bid not found on this job" });
     }
 
-    // Change the bid status to "ongoing"
+    if (bid.status !== "Pending") {
+      return res.status(400).json({ message: "Bid cannot be awarded" });
+    }
+
+    const clientEmail = job.user_email;
+    const client = await User.findOne({ email: clientEmail });
+
+    if (!client) {
+      return res.status(404).json({ message: "Client not found" });
+    }
+
+    const freelancer = await User.findOne({ email: bid.email });
+
+    if (!freelancer) {
+      return res.status(404).json({ message: "Freelancer not found" });
+    }
+
+    const jobBudget = job.budget;
+
+    if (client.accountBalance < jobBudget) {
+      return res.status(400).json({ message: "Insufficient funds" });
+    }
+
+    client.accountBalance -= jobBudget;
+    freelancer.accountBalance += jobBudget;
+
     bid.status = "Ongoing";
 
     await job.save();
+    await client.save();
+    await freelancer.save();
 
     res.status(200).json({
       message: "Bid awarded and status changed to ongoing",
