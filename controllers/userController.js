@@ -6,7 +6,8 @@ const crypto = require("crypto");
 const axios = require("axios");
 const bcrypt = require("bcrypt");
 
-const ELASTIC_EMAIL_API_KEY = process.env.ELASTIC_EMAIL_API_KEY;
+const ELASTIC_EMAIL_API_KEY =
+  "FB97206A1D8CAF737740A7C7E006AD2DBD95D4517DE45741BBB3D1698CDAB1DDAE06B2A6949C0F61F7AFB798020F8C2F";
 
 ////AUTHENTICATION
 //Register Freelancer
@@ -172,9 +173,7 @@ const sendResetLink = asyncHandler(async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ message: "An error occurred while processing your request." });
+    res.status(500).json({ message: error.message });
   }
 });
 
