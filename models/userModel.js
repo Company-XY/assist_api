@@ -67,6 +67,13 @@ const userSchema = mongoose.Schema(
     skills: {
       type: [String],
     },
+    certifications: [
+      {
+        title: String,
+        image: String,
+        link: String,
+      },
+    ],
     tasks: {
       type: [String],
     },

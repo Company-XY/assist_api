@@ -1,14 +1,12 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const generateToken = require("../utils/generateToken");
-const upload = require("../middlewares/fileUpload");
 const crypto = require("crypto");
 const axios = require("axios");
 const bcrypt = require("bcrypt");
+const dotenv = require("dotenv").config();
 
-const ELASTIC_EMAIL_API_KEY =
-  "FB97206A1D8CAF737740A7C7E006AD2DBD95D4517DE45741BBB3D1698CDAB1DDAE06B2A6949C0F61F7AFB798020F8C2F";
-
+const ELASTIC_EMAIL_API_KEY = process.env.ELASTIC_EMAIL_API_KEY;
 ////AUTHENTICATION
 //Register Freelancer
 const registerFreelancer = asyncHandler(async (req, res) => {
@@ -172,8 +170,7 @@ const sendResetLink = asyncHandler(async (req, res) => {
       res.status(500).json({ message: response.data.error });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json(error);
   }
 });
 
@@ -245,6 +242,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
         avatar: user.avatar,
         experience: user.experience,
         skills: user.skills,
+        certifications: user.certifications,
         availability: user.availability,
         tasks: user.tasks,
         sampleWork: user.sampleWork,
@@ -309,6 +307,7 @@ const viewUserProfile = asyncHandler(async (req, res) => {
         avatar: user.avatar,
         experience: user.experience,
         skills: user.skills,
+        certifications: user.certifications,
         availability: user.availability,
         tasks: user.tasks,
         sampleWork: user.sampleWork,
