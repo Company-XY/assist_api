@@ -11,6 +11,8 @@ const {
   getUserProfile,
   viewUserProfile,
   updateUserProfile,
+  verifyEmailWithCode,
+  sendEmailVerificationCode,
 } = require("../controllers/userController");
 
 const router = express.Router();
@@ -20,6 +22,8 @@ router.get("/all/users", protect, getAllUser);
 router.post("/login", loginUser);
 router.post("/register/client", registerClient);
 router.post("/register/freelancer", registerFreelancer);
+router.post("/verify/email/code", verifyEmailWithCode);
+router.post("/verify/email", sendEmailVerificationCode);
 router.post("/reset", sendResetLink);
 router.post("/reset/password", resetPassword);
 router.get("/profile/:id", getUserProfile);

@@ -43,6 +43,9 @@ title: Topic 7 DQ1.edited.docx
 GET http://localhost:8080/api/v1/profile/64fee35c195c98e3040f0746
 
 ###
+GET http://localhost:8080/api/v1/profile/651e754e5ee16e9ed4dc3553
+
+###
 GET http://localhost:8080/api/v1/profile/64fee35c195c98e3040f0746
 
 ###
@@ -62,7 +65,7 @@ POST http://localhost:8080/api/v1/login
 Content-Type: application/json
 
 {
-    "email": "oloogeorge633@gmail.com",
+    "email": "collog1824@gmail.com",
     "password": "Olosko2018?"
 }
 
@@ -158,4 +161,19 @@ Content-Type: application/json
 
 {
     "email": "freelancer23@gmail.com"
+}
+###
+POST http://localhost:8080/api/v1/verify/email
+Content-Type: application/json
+
+{
+    "email": "collog1824@gmail.com"
+}
+###
+POST http://localhost:8080/api/v1/verify/email/code
+Content-Type: application/json
+
+{
+    "email": "collog1824@gmail.com",
+    "code": "676360"
 }

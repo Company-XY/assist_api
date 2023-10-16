@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const generateToken = require("../utils/generateToken");
+const generateRandomVerificationCode = require("../middlewares/emailVerificationCode");
 const crypto = require("crypto");
 const axios = require("axios");
 const bcrypt = require("bcrypt");
@@ -322,6 +323,73 @@ const viewUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+//POST verify email
+const sendEmailVerificationCode = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const verificationCode = generateRandomVerificationCode();
+    user.verificationCode = verificationCode;
+    await user.save();
+
+    const emailData = {
+      from: "oloogeorge633@gmail.com",
+      to: email,
+      subject: "Email Verification Code",
+      bodyText: `Your email verification code is: ${verificationCode}`,
+      apiKey: process.env.ELASTIC_EMAIL_API_KEY,
+    };
+
+    // Send the email using Elastic Email API
+    const response = await axios.post(
+      "https://api.elasticemail.com/v2/email/send",
+      emailData,
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    if (response.data.success) {
+      res.status(200).json({ message: "Verification code sent successfully." });
+    } else {
+      res.status(500).json({ message: response.data.error });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+//POST VErify email with code
+const verifyEmailWithCode = asyncHandler(async (req, res) => {
+  const { code, email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    if (user.verificationCode !== code) {
+      return res.status(400).json({ message: "Invalid verification code." });
+    }
+
+    user.emailVerified = true;
+    user.verificationCode = null;
+    await user.save();
+
+    res.status(200).json({ message: "Email verification successful." });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 ///////MISC//////////////////////////////////////
 //Test Server Status
 const getStatus = asyncHandler(async (req, res) => {
@@ -353,4 +421,6 @@ module.exports = {
   getUserProfile,
   viewUserProfile,
   updateUserProfile,
+  sendEmailVerificationCode,
+  verifyEmailWithCode,
 };
