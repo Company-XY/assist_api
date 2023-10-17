@@ -339,18 +339,61 @@ const sendEmailVerificationCode = asyncHandler(async (req, res) => {
     user.verificationCode = verificationCode;
     await user.save();
 
+    const name = user.name;
+
     const emailData = {
       from: "oloogeorge633@gmail.com",
       to: email,
       subject: "Email Verification Code",
-      bodyText: `Your email verification code is: ${verificationCode}`,
+      body: `
+        <html>
+        <head>
+          <style>
+            /* Add your CSS styles here */
+            body {
+              font-family: Arial, sans-serif;
+              background: linear-gradient(to bottom, #00f, #007ACC, #007ACC);
+              background-repeat: repeat;
+              color: white;
+              padding: 20px;
+            }
+            .container {
+              max-width: 600px;
+              margin: 0 auto;
+              padding: 20px;
+              background-color: #ffffff;
+            }
+            h1 {
+              color: blue;
+              font-size: 40px;
+            }
+            h2 {
+              font-size: 28px;
+            }
+            p {
+              font-size: 18px;
+            }
+            span{
+              color: blue;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h1>Assist Africa</h1>
+            <h2>Hello, ${name}!</h2>
+            <p>Your email verification code is: <span>${verificationCode}</span></p>
+          </div>
+        </body>
+        </html>
+      `,
       apiKey: process.env.ELASTIC_EMAIL_API_KEY,
     };
 
     // Send the email using Elastic Email API
     const response = await axios.post(
       "https://api.elasticemail.com/v2/email/send",
-      emailData,
+      new URLSearchParams(emailData).toString(),
       {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -364,7 +407,10 @@ const sendEmailVerificationCode = asyncHandler(async (req, res) => {
       res.status(500).json({ message: response.data.error });
     }
   } catch (error) {
-    res.status(500).json(error);
+    console.error("Error sending email:", error);
+    res.status(500).json({
+      message: "An error occurred while sending the verification code.",
+    });
   }
 });
 
