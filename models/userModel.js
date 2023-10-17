@@ -106,6 +106,10 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isPremium: {
+      type: Boolean,
+      default: false,
+    },
     verificationCode: {
       type: String,
     },

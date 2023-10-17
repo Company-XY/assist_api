@@ -250,6 +250,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
         paymentMethod: user.paymentMethod,
         paymentRate: user.paymentRate,
         rating: user.rating,
+        isPremium: user.isPremium,
         isVerified: user.isVerified,
         createdAt: user.createdAt,
       });
@@ -315,6 +316,7 @@ const viewUserProfile = asyncHandler(async (req, res) => {
         paymentMethod: user.paymentMethod,
         paymentRate: user.paymentRate,
         rating: user.rating,
+        isPremium: user.isPremium,
         isVerified: user.isVerified,
       });
     }

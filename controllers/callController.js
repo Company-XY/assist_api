@@ -36,6 +36,40 @@ const createCall = asyncHandler(async (req, res) => {
   }
 });
 
+//Create call for only premium members... to be implemented
+const createCall2 = asyncHandler(async (req, res) => {
+  try {
+    const { phone, businessName, prGoals, budget, time, date, time2, date2 } =
+      req.body;
+
+    const { name, email, isPremium } = req.user;
+
+    // Check if the user is a premium user
+    if (!isPremium) {
+      return res
+        .status(403)
+        .json({ message: "Premium users only can book calls." });
+    }
+
+    const newCall = await Call.create({
+      name,
+      email,
+      phone,
+      businessName,
+      prGoals,
+      budget,
+      time,
+      date,
+      time2,
+      date2,
+    });
+
+    res.status(201).json(newCall);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 const getOneCall = asyncHandler(async (req, res) => {
   try {
     const oneCall = await Call.findById(req.params.id);
