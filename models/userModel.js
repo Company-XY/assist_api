@@ -55,6 +55,9 @@ const userSchema = mongoose.Schema(
     phoneVerificationCode: {
       type: String,
     },
+    phoneVerificationCodeExpiresAt: {
+      type: Date,
+    },
     accountBalance: {
       type: Number,
       default: 0,

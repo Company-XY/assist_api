@@ -312,7 +312,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-//Update user profile
+// Update user profile
 const updateUserProfile = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
@@ -322,6 +322,18 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
+    }
+
+    if (updateFields.phone) {
+      if (updateFields.phone !== user.phone) {
+        const existingUser = await User.findOne({ phone: updateFields.phone });
+
+        if (existingUser) {
+          return res
+            .status(400)
+            .json({ message: "Phone number is already in use" });
+        }
+      }
     }
 
     const updatedUser = await User.findByIdAndUpdate(id, updateFields, {
@@ -491,18 +503,21 @@ const verifyEmailWithCode = asyncHandler(async (req, res) => {
 });
 
 //PHONE VERIFICATIONS................
-
-//Send verification code
 // Send verification code
+
 const sendPhoneVerificationCode = asyncHandler(async (req, res) => {
   const { phoneNumber } = req.body;
 
   const verificationCode = Math.floor(100000 + Math.random() * 900000);
 
+  // Calculate the expiration time, which is 10 minutes from the current time
+  const expirationTime = new Date();
+  expirationTime.setMinutes(expirationTime.getMinutes() + 10);
+
   const smsData = {
     username: username,
     to: phoneNumber,
-    message: `Your Assist Africa Phone Number Verification Code is: ${verificationCode}`,
+    message: `Your Assist Africa Phone Number Verification Code is: ${verificationCode}. The Code will Expire in Ten Minutes`,
   };
 
   try {
@@ -514,22 +529,19 @@ const sendPhoneVerificationCode = asyncHandler(async (req, res) => {
     });
 
     if (response.status === 201) {
-      console.log("SMS sent successfully");
-
       await User.updateOne(
         { phone: phoneNumber },
-        { phoneVerificationCode: verificationCode }
+        {
+          phoneVerificationCode: verificationCode,
+          phoneVerificationCodeExpiresAt: expirationTime,
+        }
       );
 
       res.json({ message: "Verification code sent successfully" });
     } else {
-      console.log("Failed to send SMS");
-      console.log(`Status Code: ${response.status}`);
-      console.log(response.data);
       res.status(500).json({ error: "Failed to send SMS" });
     }
   } catch (error) {
-    console.error("Error sending SMS:", error);
     res.status(500).json({ error: "Error sending SMS" });
   }
 });
@@ -546,18 +558,23 @@ const verifyPhoneWithCode = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "User not found." });
     }
 
-    if (user.phoneVerificationCode !== code) {
-      return res.status(400).json({ message: "Invalid verification code." });
+    if (
+      user.phoneVerificationCode !== code ||
+      user.phoneVerificationCodeExpiresAt < new Date()
+    ) {
+      return res
+        .status(400)
+        .json({ message: "Invalid or expired verification code." });
     }
 
     user.phoneVerified = true;
     user.phoneVerificationCode = null;
+    user.phoneVerificationCodeExpiresAt = null;
 
     await user.save();
 
     res.json({ message: "Phone verification successful." });
   } catch (error) {
-    console.error(error);
     res.status(500).json({
       error: "An error occurred while verifying the phone with the code.",
     });
