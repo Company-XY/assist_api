@@ -177,3 +177,19 @@ Content-Type: application/json
     "email": "collog1824@gmail.com",
     "code": "676360"
 }
+
+###
+POST http://localhost:8080/api/v1/verify/phone
+Content-Type: application/json
+
+{
+    "phoneNumber": "+254792290122"
+}
+###
+POST http://localhost:8080/api/v1/verify/phone/code
+Content-Type: application/json
+
+{
+    "phoneNumber": "+254792290122",
+    "code": "578531"
+}

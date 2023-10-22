@@ -46,10 +46,14 @@ const userSchema = mongoose.Schema(
     },
     phone: {
       type: String,
+      unique: true,
     },
     phoneVerified: {
       type: Boolean,
       default: false,
+    },
+    phoneVerificationCode: {
+      type: String,
     },
     accountBalance: {
       type: Number,

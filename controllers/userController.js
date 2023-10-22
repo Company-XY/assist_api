@@ -6,6 +6,14 @@ const crypto = require("crypto");
 const axios = require("axios");
 const bcrypt = require("bcrypt");
 const dotenv = require("dotenv").config();
+const qs = require("qs");
+
+//VARIABLES
+//To be transferred to dotenv file
+const username = "oloskoSMS";
+const apiKey =
+  "8ab95cd2433328c88c23ee970ced16f60b9fbf3e3129940811ab5fae1d2a2204";
+const apiUrl = "https://api.africastalking.com/version1/messaging";
 
 const ELASTIC_EMAIL_API_KEY = process.env.ELASTIC_EMAIL_API_KEY;
 ////AUTHENTICATION
@@ -482,6 +490,80 @@ const verifyEmailWithCode = asyncHandler(async (req, res) => {
   }
 });
 
+//PHONE VERIFICATIONS................
+
+//Send verification code
+// Send verification code
+const sendPhoneVerificationCode = asyncHandler(async (req, res) => {
+  const { phoneNumber } = req.body;
+
+  const verificationCode = Math.floor(100000 + Math.random() * 900000);
+
+  const smsData = {
+    username: username,
+    to: phoneNumber,
+    message: `Your Assist Africa phone number verification code is: ${verificationCode}`,
+  };
+
+  try {
+    const response = await axios.post(apiUrl, qs.stringify(smsData), {
+      headers: {
+        apiKey: apiKey,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
+
+    if (response.status === 201) {
+      console.log("SMS sent successfully");
+
+      await User.updateOne(
+        { phone: phoneNumber },
+        { phoneVerificationCode: verificationCode }
+      );
+
+      res.json({ message: "Verification code sent successfully" });
+    } else {
+      console.log("Failed to send SMS");
+      console.log(`Status Code: ${response.status}`);
+      console.log(response.data);
+      res.status(500).json({ error: "Failed to send SMS" });
+    }
+  } catch (error) {
+    console.error("Error sending SMS:", error);
+    res.status(500).json({ error: "Error sending SMS" });
+  }
+});
+
+//VERIFY WITH CODE
+// Verify phone with code
+const verifyPhoneWithCode = asyncHandler(async (req, res) => {
+  const { code, phoneNumber } = req.body;
+
+  try {
+    const user = await User.findOne({ phone: phoneNumber });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    if (user.phoneVerificationCode !== code) {
+      return res.status(400).json({ message: "Invalid verification code." });
+    }
+
+    user.phoneVerified = true;
+    user.phoneVerificationCode = null;
+
+    await user.save();
+
+    res.json({ message: "Phone verification successful." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "An error occurred while verifying the phone with the code.",
+    });
+  }
+});
+
 ///////MISC//////////////////////////////////////
 //Test Server Status
 const getStatus = asyncHandler(async (req, res) => {
@@ -515,4 +597,6 @@ module.exports = {
   updateUserProfile,
   sendEmailVerificationCode,
   verifyEmailWithCode,
+  sendPhoneVerificationCode,
+  verifyPhoneWithCode,
 };
