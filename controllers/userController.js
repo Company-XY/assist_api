@@ -502,7 +502,7 @@ const sendPhoneVerificationCode = asyncHandler(async (req, res) => {
   const smsData = {
     username: username,
     to: phoneNumber,
-    message: `Your Assist Africa phone number verification code is: ${verificationCode}`,
+    message: `Your Assist Africa Phone Number Verification Code is: ${verificationCode}`,
   };
 
   try {
