@@ -7,6 +7,8 @@ const axios = require("axios");
 const bcrypt = require("bcrypt");
 const dotenv = require("dotenv").config();
 const qs = require("qs");
+const cloudinary = require("../utils/cloudinary");
+const upload = require("../middlewares/multer");
 
 //VARIABLES
 //To be transferred to dotenv file
@@ -324,23 +326,43 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    if (updateFields.phone) {
-      if (updateFields.phone !== user.phone) {
-        const existingUser = await User.findOne({ phone: updateFields.phone });
+    if (updateFields.phone && updateFields.phone !== user.phone) {
+      const existingUser = await User.findOne({ phone: updateFields.phone });
 
-        if (existingUser) {
-          return res
-            .status(400)
-            .json({ message: "Phone number is already in use" });
-        }
+      if (existingUser) {
+        return res
+          .status(400)
+          .json({ message: "Phone number is already in use" });
       }
     }
 
-    const updatedUser = await User.findByIdAndUpdate(id, updateFields, {
-      new: true,
-    });
+    // Handle avatar upload using Multer and Cloudinary within the controller
+    multer.single("avatar")(req, res, async (err) => {
+      if (err) {
+        return res.status(400).json({ message: "Error uploading file" });
+      }
 
-    res.status(200).json(updatedUser);
+      if (req.file) {
+        const result = await cloudinary.uploader.upload(req.file.path);
+
+        // Update the user's avatar information in the database
+        user.avatar = {
+          title: req.file.originalname,
+          imageUrl: result.secure_url,
+        };
+      }
+
+      // Update other profile fields based on the keys in updateFields
+      for (const key in updateFields) {
+        if (key !== "avatar") {
+          user[key] = updateFields[key];
+        }
+      }
+
+      const updatedUser = await user.save();
+
+      res.status(200).json(updatedUser);
+    });
   } catch (error) {
     res.status(400).json(error);
     console.error(error);

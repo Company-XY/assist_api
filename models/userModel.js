@@ -88,7 +88,8 @@ const userSchema = mongoose.Schema(
       type: String,
     },
     avatar: {
-      type: String,
+      title: String,
+      imageUrl: String,
     },
     sampleWork: {
       type: String,
