@@ -328,6 +328,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       availability,
       paymentRate,
       paymentMethod,
+      isApproved,
     } = req.body;
 
     const user = await User.findById(id);
