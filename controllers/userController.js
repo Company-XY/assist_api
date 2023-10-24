@@ -336,8 +336,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       }
     }
 
-    // Handle avatar upload using Multer and Cloudinary within the controller
-    multer.single("avatar")(req, res, async (err) => {
+    upload.single("avatar")(req, res, async (err) => {
       if (err) {
         return res.status(400).json({ message: "Error uploading file" });
       }
