@@ -6,7 +6,7 @@ const userSchema = mongoose.Schema(
     role: {
       type: String,
       enum: ["Client", "Freelancer", "Admin"],
-      required: [true, "Choose Your Role"],
+      required: true,
     },
     type: {
       type: String,
@@ -21,12 +21,12 @@ const userSchema = mongoose.Schema(
     name: {
       type: String,
       required: true,
-      unique: [true, "Name has to be unique"],
+      unique: true,
     },
     email: {
       type: String,
       required: true,
-      unique: [true, "Email already in use"],
+      unique: true,
     },
     emailVerified: {
       type: Boolean,

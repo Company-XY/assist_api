@@ -328,7 +328,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       availability,
       paymentRate,
       paymentMethod,
-      isApproved,
     } = req.body;
 
     const user = await User.findById(id);
@@ -370,7 +369,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       user.availability = availability;
       user.paymentRate = paymentRate;
       user.paymentMethod = paymentMethod;
-      user.isApproved = isApproved;
 
       const updatedUser = await user.save();
       res.status(200).json(updatedUser);
@@ -378,6 +376,26 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   } catch (error) {
     res.status(400).json(error);
     console.error(error);
+  }
+});
+
+// Update isApproved status
+const updateIsApproved = asyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findByIdAndUpdate(
+      id,
+      { isApproved: true },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User Not Found!" });
+    }
+
+    res.status(201).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 
@@ -650,4 +668,5 @@ module.exports = {
   verifyEmailWithCode,
   sendPhoneVerificationCode,
   verifyPhoneWithCode,
+  updateIsApproved,
 };
