@@ -318,13 +318,27 @@ const getUserProfile = asyncHandler(async (req, res) => {
 const updateUserProfile = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
-    const updateFields = req.body;
+    const {
+      bio,
+      phone,
+      location,
+      contactInfo,
+      experience,
+      tasks,
+      availability,
+      paymentRate,
+      paymentMethod,
+    } = req.body;
+
     const user = await User.findById(id);
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    if (updateFields.phone && updateFields.phone !== user.phone) {
-      const existingUser = await User.findOne({ phone: updateFields.phone });
+
+    if (phone && phone !== user.phone) {
+      const existingUser = await User.findOne({ phone });
+
       if (existingUser) {
         return res
           .status(400)
@@ -332,6 +346,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       }
     }
 
+    // Handle avatar upload
     upload.single("avatar")(req, res, async (err) => {
       if (err) {
         return res.status(400).json({ message: "Error uploading file" });
@@ -345,11 +360,16 @@ const updateUserProfile = asyncHandler(async (req, res) => {
         };
       }
 
-      for (const key in updateFields) {
-        if (key !== "avatar") {
-          user[key] = updateFields[key];
-        }
-      }
+      user.bio = bio;
+      user.phone = phone;
+      user.location = location;
+      user.contactInfo = contactInfo;
+      user.experience = experience;
+      user.tasks = tasks;
+      user.availability = availability;
+      user.paymentRate = paymentRate;
+      user.paymentMethod = paymentMethod;
+
       const updatedUser = await user.save();
       res.status(200).json(updatedUser);
     });
