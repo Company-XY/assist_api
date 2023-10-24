@@ -370,6 +370,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       user.availability = availability;
       user.paymentRate = paymentRate;
       user.paymentMethod = paymentMethod;
+      user.isApproved = isApproved;
 
       const updatedUser = await user.save();
       res.status(200).json(updatedUser);
