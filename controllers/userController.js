@@ -334,6 +334,8 @@ const updateUserProfile = asyncHandler(async (req, res) => {
           .status(400)
           .json({ message: "Phone number is already in use" });
       }
+
+      user.phone = updateFields.phone;
     }
 
     upload.single("avatar")(req, res, async (err) => {
@@ -344,16 +346,14 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       if (req.file) {
         const result = await cloudinary.uploader.upload(req.file.path);
 
-        // Update the user's avatar information in the database
         user.avatar = {
           title: req.file.originalname,
           imageUrl: result.secure_url,
         };
       }
 
-      // Update other profile fields based on the keys in updateFields
       for (const key in updateFields) {
-        if (key !== "avatar") {
+        if (key !== "avatar" && key !== "phone") {
           user[key] = updateFields[key];
         }
       }
