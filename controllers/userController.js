@@ -319,16 +319,12 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
     const updateFields = req.body;
-
-    const user = await User.findByIdAndUpdate(id, updateFields, { new: true });
-
+    const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
     if (updateFields.phone && updateFields.phone !== user.phone) {
       const existingUser = await User.findOne({ phone: updateFields.phone });
-
       if (existingUser) {
         return res
           .status(400)
@@ -336,22 +332,29 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       }
     }
 
-    if (req.file) {
-      const result = await cloudinary.uploader.upload(req.file.path);
+    upload.single("avatar")(req, res, async (err) => {
+      if (err) {
+        return res.status(400).json({ message: "Error uploading file" });
+      }
+      if (req.file) {
+        const result = await cloudinary.uploader.upload(req.file.path);
 
-      user.avatar = {
-        title: req.file.originalname,
-        imageUrl: result.secure_url,
-      };
-    }
+        user.avatar = {
+          title: req.file.originalname,
+          imageUrl: result.secure_url,
+        };
+      }
 
-    await user.save();
-
-    res.status(200).json({ message: "User profile updated", user });
+      for (const key in updateFields) {
+        if (key !== "avatar") {
+          user[key] = updateFields[key];
+        }
+      }
+      const updatedUser = await user.save();
+      res.status(200).json(updatedUser);
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Internal Server Error", error: error.message });
+    res.status(400).json(error);
     console.error(error);
   }
 });
