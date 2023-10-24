@@ -334,8 +334,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
           .status(400)
           .json({ message: "Phone number is already in use" });
       }
-
-      user.phone = updateFields.phone;
     }
 
     upload.single("avatar")(req, res, async (err) => {
@@ -353,9 +351,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       }
 
       for (const key in updateFields) {
-        if (key !== "avatar" && key !== "phone") {
-          user[key] = updateFields[key];
-        }
+        user[key] = updateFields[key];
       }
 
       const updatedUser = await user.save();
