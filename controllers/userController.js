@@ -331,13 +331,27 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       paymentMethod,
     } = req.body;
 
-    const user = await User.findById(id);
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      {
+        bio,
+        phone,
+        location,
+        contactInfo,
+        experience,
+        tasks,
+        availability,
+        paymentRate,
+        paymentMethod,
+      },
+      { new: true }
+    );
 
-    if (!user) {
+    if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    if (phone && phone !== user.phone) {
+    if (phone && phone !== updatedUser.phone) {
       const existingUser = await User.findOne({ phone });
 
       if (existingUser) {
@@ -347,20 +361,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       }
     }
 
-    user.bio = bio;
-    user.phone = phone;
-    user.location = location;
-    user.contactInfo = contactInfo;
-    user.experience = experience;
-    user.tasks = tasks;
-    user.availability = availability;
-    user.paymentRate = paymentRate;
-    user.paymentMethod = paymentMethod;
-
-    const updatedUser = await user.save();
     res.status(200).json(updatedUser);
   } catch (error) {
-    res.status(400).json(error);
+    res.status(400).json({ message: error.message });
     console.error(error);
   }
 });
