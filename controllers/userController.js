@@ -123,19 +123,23 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email });
 
-  if (user && (await user.matchPassword(password))) {
-    const token = generateToken(user._id);
-
-    res.json({
-      _id: user.id,
-      role: user.role,
-      email: user.email,
-      name: user.name,
-      token: token,
-    });
-  } else {
-    res.status(401).json("Invalid Email or Password");
+  if (!user) {
+    return res.status(401).json("No account found under this email.");
   }
+
+  if (user && !(await user.matchPassword(password))) {
+    return res.status(401).json("Wrong password.");
+  }
+
+  const token = generateToken(user._id);
+
+  res.json({
+    _id: user.id,
+    role: user.role,
+    email: user.email,
+    name: user.name,
+    token: token,
+  });
 });
 
 //////PASSWORD RESET
