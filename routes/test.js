@@ -44,9 +44,9 @@ router
 
 router.post("/jobs/:jobId", addReviewAndRating);
 router.get("/jobs-feed", getFeedJobs);
-router.patch("/jobs/:id", updateJob);
+router.patch("/jobs/:id", protect, updateJob);
 router.patch("/review/:id", reviewJob);
-router.delete("/jobs/:id", deleteJob);
+router.delete("/jobs/:id", protect, deleteJob);
 router.get("/jobs/:id", getOneJob);
 router.patch("/jobs/submit/:id", submitJob);
 router.patch("/jobs/review/:id", reviewAndApproveJob);

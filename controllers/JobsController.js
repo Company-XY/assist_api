@@ -15,7 +15,7 @@ const getAllJobs = asyncHandler(async (req, res) => {
   }
 });
 
-//GET feed jobs to be dislayed for the freelancer
+//GET feed jobs to be dislayed for the freelancer, they are open for bidding
 //Stage is still set to "Pending"
 //GET METHOD
 const getFeedJobs = asyncHandler(async (req, res) => {
@@ -89,11 +89,18 @@ const updateJob = asyncHandler(async (req, res) => {
   try {
     const jobId = req.params.id;
     const updateFields = req.body;
+    const user = req.user;
 
     const existingJob = await Job.findById(jobId);
 
     if (!existingJob) {
       return res.status(404).json({ message: "Job not found" });
+    }
+
+    if (existingJob.user_email !== user.email) {
+      return res
+        .status(401)
+        .json({ message: "You are not authorized to edit this job" });
     }
 
     const updatedJob = await Job.findByIdAndUpdate(jobId, updateFields, {
@@ -111,10 +118,25 @@ const updateJob = asyncHandler(async (req, res) => {
 //DELETE METHOD
 const deleteJob = asyncHandler(async (req, res) => {
   try {
+    const jobToDelete = await Job.findById(req.params.id);
+
+    if (!jobToDelete) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+
+    const user = req.user;
+
+    if (jobToDelete.user_email !== user.email) {
+      return res
+        .status(401)
+        .json({ message: "You are not authorized to delete this job" });
+    }
+
     const deletedJob = await Job.findByIdAndDelete(req.params.id);
     res.status(200).json("Deleted Successfully");
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(500).json({ message: error.message });
+    console.error(error);
   }
 });
 
