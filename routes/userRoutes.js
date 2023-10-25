@@ -16,6 +16,7 @@ const {
   sendPhoneVerificationCode,
   verifyPhoneWithCode,
   updateIsApproved,
+  uploadAvatar,
 } = require("../controllers/userController");
 
 const router = express.Router();
@@ -34,6 +35,7 @@ router.post("/reset/password", resetPassword);
 router.get("/profile/:id", getUserProfile);
 router.get("/profile/other/:id", viewUserProfile);
 router.patch("/profile/:id", updateUserProfile);
+router.patch("/profile/avatar/:id", uploadAvatar);
 router.patch("/profile/approval/:id", updateIsApproved);
 
 module.exports = router;
