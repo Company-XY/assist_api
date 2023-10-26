@@ -320,7 +320,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 
 //Update User Profile
 //Does not include avatar uplaod as well as isApproved status
-const updateUserProfile = asyncHandler(async (req, res) => {
+const updateUserProfile2 = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
     const {
@@ -369,6 +369,21 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
     console.error(error);
+  }
+});
+
+const updateUserProfile = asyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { updatedFields } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(id, updatedFields, {
+      new: true,
+    });
+    res.status(201).json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ message: "Error" });
+    console.log(error);
   }
 });
 
