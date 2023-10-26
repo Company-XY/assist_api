@@ -320,7 +320,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 
 //Update User Profile
 //Does not include avatar uplaod as well as isApproved status
-const updateUserProfile2 = asyncHandler(async (req, res) => {
+const updateUserProfile = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
     const {
@@ -372,7 +372,7 @@ const updateUserProfile2 = asyncHandler(async (req, res) => {
   }
 });
 
-const updateUserProfile = asyncHandler(async (req, res) => {
+const updateUserProfile2 = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
     const { updatedFields } = req.body;
