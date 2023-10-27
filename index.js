@@ -13,6 +13,7 @@ const callRoutes = require("./routes/callRoutes");
 const detailsRoutes = require("./routes/detailsRoutes");
 const productRoutes = require("./routes/productRoutes");
 const ratingRoutes = require("./routes/ratingRoutes");
+const uploadRoutes = require("./routes/uploadRoutes");
 
 const app = express();
 app.use(cors());
@@ -46,5 +47,6 @@ app.use("/api/v1", callRoutes);
 app.use("/api/v1", detailsRoutes);
 app.use("/api/v1", productRoutes);
 app.use("/api/v1", ratingRoutes);
+app.use("/api/v1", uploadRoutes);
 
 module.exports = app;
