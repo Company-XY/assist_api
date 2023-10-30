@@ -4,7 +4,7 @@ const { uploadToBackblazeB2 } = require("../utils/backblaze");
 exports.uploadFile = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
+      return res.status(400).json({ error: "No file uploaded..." });
     }
 
     const file = req.file;
@@ -14,9 +14,8 @@ exports.uploadFile = async (req, res) => {
 
     // Save file information to the database
     const uploadedFile = new File({
-      filename: file.filename,
+      filename: file.originalname,
       downloadLink: url,
-      // You can add more fields here if needed
     });
 
     await uploadedFile.save();

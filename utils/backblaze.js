@@ -1,4 +1,3 @@
-// helpers/backblaze.js
 const B2 = require("backblaze-b2");
 
 const b2 = new B2({
@@ -14,7 +13,7 @@ b2.authorize()
 
 async function uploadToBackblazeB2(file) {
   const fileId = "generated_file_id";
-  const url = `https://f001.backblazeb2.com/file/yourBucketName/${fileId}`;
+  const url = `https://f001.backblazeb2.com/file/AssistTrial/${fileId}`;
 
   return { url, fileId };
 }
