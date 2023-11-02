@@ -77,7 +77,7 @@ Content-Type: application/json
     "name": "Olosko",
     "type": "Inidividual Client",
     "email": "oloogeorge633@gmail.com",
-    "password": "Olosko2018?"
+    "password": "Olosko2018??"
 }
 
 ###
