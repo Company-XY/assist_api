@@ -15,7 +15,7 @@ POST https://assist-api-okgk.onrender.com/api/v1/jobs
 Content-Type: application/json
 
   {
-    "user_email": "client2@gmail.com",
+    "user_email": "client3@gmail.com",
     "title": "HR Virtual Assistant",
     "services": "HR Support",
     "description": "We need a virtual assistant to support our HR department. Your responsibilities will include job posting, resume screening, and interview coordination.",
