@@ -43,7 +43,7 @@ The user schema defines the structure of user documents in the MongoDB collectio
 <br>
 User Methods
 The user model defines a method named matchPassword that is used to compare a provided password with the user's stored hashed password. This method is typically used for user authentication.
-Usage
+Usage.
 To use this user model in your Node.js application, you can import it as follows:
 javascriptCopy code
 const mongoose = require("mongoose"); const bcrypt = require("bcrypt"); // Import the User model const User = require("./User"); // Replace with the actual path to your User model file // Your application code here... 
