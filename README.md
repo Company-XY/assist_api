@@ -9,7 +9,7 @@ Before using this user model, ensure that you have the following dependencies in
 You can install these dependencies using npm or yarn:
 bashCopy code
 npm install mongoose bcrypt # OR yarn add mongoose bcrypt 
-Save to grepper
+Save to grepper.
 <br>
 User Schema
 The user schema defines the structure of user documents in the MongoDB collection. Below is a breakdown of the schema fields:
